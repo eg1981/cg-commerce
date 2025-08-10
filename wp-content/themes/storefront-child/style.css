@@ -27,3 +27,31 @@ body {
         box-sizing: content-box;
     }
 }
+.top-header{
+    height: 52px;
+    background: rgba(0, 38, 113, 1);
+    color: #fff;
+    line-height: 52px;
+}
+.top-header-container{
+    max-width: 500px;
+    margin: auto;
+    text-align: center;
+}
+[dir='rtl'] .top-header-container .slick-prev:before{
+    content:"";
+    background: url(assets/images/slick-arrow-white.svg) 0 0 no-repeat;
+    width: 11px;
+    height: 20px;
+    display: block;
+    opacity: 1;
+    transform: scaleX(-1);
+}
+[dir='rtl'] .top-header-container .slick-next:before{
+    content:"";
+    background: url(assets/images/slick-arrow-white.svg) 0 0 no-repeat;
+    width: 11px;
+    height: 20px;
+    display: block;
+    opacity: 1;
+}
