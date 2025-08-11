@@ -43,3 +43,10 @@ function top_header(){
     <?php
     endif;
 }
+
+//header icons area
+add_action( 'after_setup_theme', function() {
+    remove_action( 'storefront_header', 'storefront_header_cart', 60 );
+    
+    add_action( 'storefront_header', 'storefront_header_cart', 25 );
+} );
