@@ -19,6 +19,9 @@ Text Domain: storefront-child
     --cg-border: #e5e7eb;
     --cg-radius: 0;
 }
+a:focus, button:focus, .button.alt:focus, input:focus, textarea:focus, input[type="button"]:focus, input[type="reset"]:focus, input[type="submit"]:focus, input[type="email"]:focus, input[type="tel"]:focus, input[type="url"]:focus, input[type="password"]:focus, input[type="search"]:focus {
+    outline: none;
+}
 body {
     font-family: "Inter", sans-serif;
     font-optical-sizing: auto;
@@ -62,6 +65,195 @@ body {
 [dir='rtl'] .top-header-container .slick-prev:before {
     transform: scaleX(-1);
 }
+
+@media (min-width: 768px) {
+    .woocommerce-active .site-header .site-branding{
+        margin-left: 0;
+        max-width: 217px;
+        margin-bottom: 0;
+    }
+    .site-header{
+        padding-top: 25px;
+    }
+    .col-full::before, .col-full::after{
+        display: none;
+    }
+    .main-navigation ul.menu, .main-navigation ul.nav-menu{
+        margin-right: 0;
+        display: flex;
+        gap: 0; 
+        justify-content: center;
+    }
+    .woocommerce-active .site-header .main-navigation{
+        width: 100%;   
+        margin-left: 0;
+    }
+    .main-navigation ul li{
+        padding: 0 50px;
+        text-align: center;
+    }
+    .main-navigation ul li:hover{
+        background: #002671;
+    }
+    .main-navigation ul li:hover a{
+        color: #fff;
+    }
+    body .site-header-cart .widget_shopping_cart{
+        left: -999em;
+        right:auto;
+        min-width: 661px;
+    }
+    body .site-header-cart:hover .widget_shopping_cart{
+        left: 0;
+        right:auto;
+    }
+}
+
+.site-header .col-full{
+    display: flex;
+    gap: 55px;
+    margin-bottom: 25px;
+    align-items: center;
+}
+
+.dgwt-wcas-search-wrapp{
+    text-align: right;
+    color: #000;
+    margin: 0;
+}
+
+.dgwt-wcas-sf-wrapp input[type=search].dgwt-wcas-search-input{
+    border-radius: 8px;
+    height: 39px;
+    font-size: 16px;
+    padding: 0;
+    padding-right: 15px;
+    line-height: 39px;
+}
+
+.dgwt-wcas-sf-wrapp input[type=search].dgwt-wcas-search-input::placeholder {
+    color: #424B5A;
+    font-style: normal;
+    opacity: 1;
+}
+
+.dgwt-wcas-sf-wrapp input[type=search].dgwt-wcas-search-input:-ms-input-placeholder {
+    color: #424B5A;
+    opacity: 1;
+}
+
+.dgwt-wcas-sf-wrapp input[type=search].dgwt-wcas-search-input::-ms-input-placeholder {
+    color: #424B5A;
+    opacity: 1;
+}
+
+.dgwt-wcas-sf-wrapp button.dgwt-wcas-search-submit{
+    padding: 0;
+    background-color: #FFB941;
+    height: 39px;
+    min-width: 39px;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+.dgwt-wcas-sf-wrapp .dgwt-wcas-search-submit:before{
+    display: none;
+}
+
+body .dgwt-wcas-ico-magnifier{
+    max-width: 16px;
+}
+
+.header-icons{
+    margin-right: auto;
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 24px;
+}
+
+.site-header-cart .cart-contents .amount{
+    display: none;
+}
+
+body .site-header-cart .cart-contents{
+    padding: 0;
+}
+
+body .site-header-cart a.cart-contents{
+    content:"";
+    background: url(assets/images/cart.svg) center no-repeat;
+    width:33px;
+    height: 33px;
+}
+
+body .site-header-cart .cart-contents::after{
+    display:none;
+}
+
+body .site-header-cart .cart-contents .count{
+    position: absolute;
+    opacity: 1;
+    font-size: 0;
+    top: -5px;
+    right: -7px;
+    text-align: center;
+}
+
+body .site-header-cart .cart-contents .count::before {
+    content: attr(data-count);
+    font-size: 11px;
+    width: 20px;
+    height: 20px;
+    background: #FFB941;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+}
+
+.woocommerce-active .site-header .site-header-cart{
+    width: auto;
+}
+
+a.wishlist_products_counter.top_wishlist-custom.no-txt{
+    background: url(assets/images/heart.svg) center no-repeat;
+    width:33px;
+    height: 33px;
+    display:block;
+}
+
+.messages-icon{
+    position: relative;
+}
+
+span.message-icon{
+    background: url(assets/images/bell.svg) center no-repeat;
+    width:33px;
+    height: 33px;  
+    display:block;  
+}
+
+.login-icon{
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 15px;
+}
+
+.login-icon .icon{
+    background: url(assets/images/user.svg) center no-repeat;
+    width:33px;
+    height: 33px;  
+    display:block;   
+}
+
+.login-icon p{
+    margin: 0;
+    color: #92A9B5;
+    font-size: 18px;
+    font-weight: 600;
+}
+
 
 /*Home page*/
 
@@ -108,6 +300,12 @@ body {
     }
     .main-navigation ul.menu>li>a, .main-navigation ul.nav-menu>li>a {
         padding: 0;
+        font-size: 18px;
+        color: #000!important;
+        font-weight: 600;
+    }
+    .main-navigation ul.menu>li:hover>a, .main-navigation ul.nav-menu>li:hover>a{
+        color: #fff!important;
     }
 }
 

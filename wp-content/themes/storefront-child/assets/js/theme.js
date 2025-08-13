@@ -62,3 +62,7 @@ jQuery(document).ready(function($){
 
   });
 })(jQuery);
+
+document.querySelectorAll('.site-header-cart .count').forEach(function(el){
+    el.setAttribute('data-count', el.textContent.replace(/\D/g, ''));
+});

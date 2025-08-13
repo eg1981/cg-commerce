@@ -44,9 +44,51 @@ function top_header(){
     endif;
 }
 
-//header icons area
+//header icons area & search
 add_action( 'after_setup_theme', function() {
     remove_action( 'storefront_header', 'storefront_header_cart', 60 );
-    
+    remove_action( 'storefront_header', 'storefront_product_search', 40 );
+    add_action( 'storefront_header', 'storefront_product_search_fibo', 23 );
+    add_action( 'storefront_header', 'storefront_header_icons_wrap', 24 );
     add_action( 'storefront_header', 'storefront_header_cart', 25 );
+    add_action( 'storefront_header', 'storefront_header_icons', 25 );
+    add_action( 'storefront_header', 'storefront_header_icons_wrap_end', 27 );
+
 } );
+
+function storefront_header_icons_wrap(){
+    echo '<div class="header-icons">';
+}
+
+function storefront_header_icons_wrap_end(){
+    echo '</div>';
+}
+
+function storefront_product_search_fibo(){
+    echo do_shortcode('[fibosearch]');
+}
+
+function storefront_header_icons(){
+    ?>
+        <div class="messages-icon">
+            <span class="message-icon"><span class="message-count"></span></span>
+        </div>
+        <div class="wish-icon">
+            <?php echo do_shortcode('[ti_wishlist_products_counter]'); ?>
+        </div>    
+        <div class="login-icon">
+            <span class="icon"></span>
+            <?php 
+                if ( is_user_logged_in() ) {
+                    $user = wp_get_current_user();
+                    echo '<p>היי, ' . esc_html( $user->first_name ) . '</p>';
+                } else {
+                    echo '<p>שלום אורח, התחבר.</p>';
+                 }
+            ?>
+        </div>            
+    <?php
+}
+
+
+
