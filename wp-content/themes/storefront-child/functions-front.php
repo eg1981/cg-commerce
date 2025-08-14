@@ -90,5 +90,42 @@ function storefront_header_icons(){
     <?php
 }
 
+//product category
+remove_action( 'woocommerce_shop_loop_item_title','woocommerce_template_loop_product_title',10 );
 
+// Add custom product title with <div>
+add_action( 'woocommerce_before_shop_loop_item', function() {
+    echo '<div class="woocommerce-loop-product__title">' . get_the_title() . '</div>';
+}, 10 );
+
+add_action( 'woocommerce_shop_loop_item_title', 'woocommerce_shop_loop_sku_desc', 10 );
+function woocommerce_shop_loop_sku_desc(){
+    global $product;
+    echo '<div class="item-sku">מק"ט: '.$product->get_sku().'</div>';
+    echo '<div class="item-desc">'.$product->get_short_description().'</div>';
+}
+
+//add_action( 'woocommerce_before_shop_loop_item_title', 'add_to_wish', 11 );
+function add_to_wish(){
+    echo do_shortcode('[ti_wishlists_addtowishlist loop=yes]');
+}
+
+remove_action( 'woocommerce_after_shop_loop_item_title', 'woocommerce_template_loop_rating', 5 );
+
+add_action( 'woocommerce_after_shop_loop_item_title', function() {
+    global $product;
+
+    $average = $product->get_average_rating();
+    $count   = $product->get_rating_count();
+
+    // מציגים רק אם יש לפחות חוות דעת אחת
+        echo '<div class="star-rating-wrap">';
+        if ( $count > 0 ) {
+                $reviews_link = get_permalink( $product->get_id() ) . '#reviews';
+                 echo wc_get_rating_html( $average, $count );
+                 echo '<a class="review-count" href="' . esc_url( $reviews_link ) . '">(' . $count . ' ביקורות)</a>';
+        }
+        echo '</div>';
+    
+}, 5 );
 

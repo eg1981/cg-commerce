@@ -69,32 +69,19 @@ $post_id = get_the_ID();
       <section class="cg-best-sellers section">
         <div class="container">
           <?php if ($best_title): ?><div class="section__head"><h2 class="section__title"><?php echo esc_html($best_title); ?></h2></div><?php endif; ?>
-          <div class="cg-products">
+          <ul class="products">
             <?php foreach ( $products as $p ) :
-              $pid      = is_object($p) ? $p->ID : (int) $p;
-              $product  = wc_get_product( $pid );
-              if ( ! $product ) continue;
-              $url      = get_permalink( $pid );
-              $img_html = get_the_post_thumbnail( $pid, 'woocommerce_thumbnail', ['class'=>'cg-product__img','loading'=>'lazy'] );
-              $title    = get_the_title( $pid );
-              $price    = $product->get_price_html();
-              $btn_url  = $product->add_to_cart_url();
-              $btn_txt  = $product->add_to_cart_text();
-              $btn_cls  = 'button add_to_cart_button ajax_add_to_cart product_type_' . $product->get_type();
+                $pid = is_object( $p ) ? $p->ID : (int) $p;
+                $post_object = get_post( $pid );
+
+                if ( ! $post_object ) continue;
+
+                setup_postdata( $GLOBALS['post'] =& $post_object );
+                wc_get_template_part( 'content', 'product' );
+            endforeach;
+            wp_reset_postdata();
             ?>
-            <article class="cg-product">
-              <a class="cg-product__link" href="<?php echo esc_url($url); ?>" aria-label="<?php echo esc_attr($title); ?>"></a>
-              <div class="cg-product__media">
-                <?php echo $img_html ?: '<div class="cg-product__placeholder"></div>'; ?>
-                <a href="<?php echo esc_url($btn_url); ?>"
-                   data-product_id="<?php echo esc_attr($pid); ?>"
-                   class="cg-product__cta <?php echo esc_attr($btn_cls); ?>"><?php echo esc_html($btn_txt); ?></a>
-              </div>
-              <h3 class="cg-product__title"><?php echo esc_html($title); ?></h3>
-              <div class="cg-product__price"><?php echo wp_kses_post($price); ?></div>
-            </article>
-            <?php endforeach; ?>
-          </div>
+            </ul>
         </div>
       </section>
       <?php endif; endif; ?>
@@ -113,13 +100,20 @@ $post_id = get_the_ID();
             $p_url  = is_array($printer) ? $printer['url'] : $printer;
             $href   = $link['url'] ?? '#'; $target = $link['target'] ?? '_self';
           ?>
-          <article class="cg-banner" style="--bg:url('<?php echo esc_url($bg_url); ?>')">
-            <a class="cg-banner__overlay" href="<?php echo esc_url($href); ?>" target="<?php echo esc_attr($target); ?>"></a>
-            <div class="cg-banner__content">
-              <?php if ($title): ?><h3 class="cg-banner__title"><?php echo esc_html($title); ?></h3><?php endif; ?>
-              <?php if ($text): ?><p class="cg-banner__text"><?php echo wp_kses_post($text); ?></p><?php endif; ?>
-            </div>
-            <?php if ($p_url): ?><img class="cg-banner__img" src="<?php echo esc_url($p_url); ?>" alt="" loading="lazy"><?php endif; ?>
+          <article class="cg-banner">
+            <div class="article-inner">
+              <?php if($bg_url): ?>
+                  <img src="<?php echo esc_url($bg_url); ?>" class="img-bg" />
+              <?php endif; ?>            
+              <div class="cg-banner__content">
+                  <div class="cg-banner__content_inner">
+                    <?php if ($title): ?><h3 class="cg-banner__title"><?php echo esc_html($title); ?></h3><?php endif; ?>
+                    <?php if ($text): ?><div class="cg-banner__text"><?php echo wp_kses_post($text); ?></div><?php endif; ?>
+                  </div> 
+                  <?php if ($p_url): ?><img class="cg-banner__img" src="<?php echo esc_url($p_url); ?>" alt="" loading="lazy"><?php endif; ?>              
+              </div>   
+              </div>
+            <a class="cg-banner-link" href="<?php echo esc_url($href); ?>" target="<?php echo esc_attr($target); ?>"><?php echo $link['title']; ?></a>         
           </article>
           <?php endwhile; ?>
         </div>
@@ -134,20 +128,25 @@ $post_id = get_the_ID();
           <?php if ($t_title): ?><h2 class="section__title"><?php echo esc_html($t_title); ?></h2><?php endif; ?>
           <div class="cg-testimonials__list js-testimonials">
             <?php while ( have_rows('testimonials') ) : the_row();
+              $item = get_sub_field('review_product')['url'];
               $avatar = get_sub_field('avatar');
               $name   = get_sub_field('name');
+              $title   = get_sub_field('title');
               $role   = get_sub_field('role');
               $quote  = get_sub_field('quote');
               $rate   = (int)(get_sub_field('rating') ?: 5);
               $av_url = is_array($avatar) ? $avatar['url'] : $avatar;
             ?>
             <article class="cg-testimonial">
-              <?php if ($av_url): ?><img class="cg-testimonial__avatar" src="<?php echo esc_url($av_url); ?>" alt="<?php echo esc_attr($name ?: ''); ?>" loading="lazy"><?php endif; ?>
+              <img src="<?php echo esc_url($item); ?>" class="review-item" />              
               <div class="cg-testimonial__body">
+                <?php if ($av_url): ?><img class="cg-testimonial__avatar" src="<?php echo esc_url($av_url); ?>" alt="<?php echo esc_attr($name ?: ''); ?>" loading="lazy"><?php endif; ?>
                 <div class="cg-testimonial__meta">
-                  <strong class="cg-testimonial__name"><?php echo esc_html($name); ?></strong>
+                  <span class="cg-testimonial__name"><?php echo esc_html($name); ?></span>
+                  <span>|</span>
                   <?php if ($role): ?><span class="cg-testimonial__role"><?php echo esc_html($role); ?></span><?php endif; ?>
                 </div>
+                <div class="review-title"><?php echo $title; ?></div>
                 <div class="cg-testimonial__rating" aria-label="<?php echo esc_attr(sprintf(__('דירוג %d מתוך 5', 'storefront-child'), $rate)); ?>">
                   <?php for($i=1;$i<=5;$i++): ?><span class="star <?php echo $i <= $rate ? 'is-on':''; ?>" aria-hidden="true">★</span><?php endfor; ?>
                 </div>
@@ -164,32 +163,48 @@ $post_id = get_the_ID();
       $nl_title = get_sub_field('newsletter_title');
       $nl_text  = get_sub_field('newsletter_text');
       $shortcode= get_sub_field('newsletter_form_shortcode');
-      $icons_bg = get_sub_field('icon_panel_bg');
-      $bg_url   = is_array($icons_bg) ? $icons_bg['url'] : $icons_bg; ?>
+      $icons_bg = get_sub_field('icon_panel_bg');      
+      $support_text = get_sub_field('support_text');
+      $bg_url   = is_array($icons_bg) ? $icons_bg['url'] : $icons_bg;
+      $news_url   = get_sub_field('news_panel_bg')['url'];
+      ?>
       <section class="cg-news-icons section">
-        <div class="container grid-2">
+        <div class="container grid-2">       
           <div class="cg-news">
-            <?php if ($nl_title): ?><h3 class="section__subtitle"><?php echo esc_html($nl_title); ?></h3><?php endif; ?>
-            <?php if ($nl_text): ?><p class="section__text"><?php echo wp_kses_post($nl_text); ?></p><?php endif; ?>
-            <div class="cg-news__form">
-              <?php echo $shortcode ? do_shortcode($shortcode) : '<!-- Set CF7 shortcode -->'; ?>
+            <?php if($news_url): ?>
+                <img src="<?php echo esc_url($news_url); ?>" class="img-bg" />
+            <?php endif; ?> 
+            <div class="cg-news-text">              
+              <?php if ($nl_title): ?><h3 class="section__subtitle"><?php echo esc_html($nl_title); ?></h3><?php endif; ?>
+              <?php if ($nl_text): ?><p class="section__text"><?php echo wp_kses_post($nl_text); ?></p><?php endif; ?>
+              <div class="cg-news__form">
+                <?php echo $shortcode ? do_shortcode($shortcode) : '<!-- Set CF7 shortcode -->'; ?>
+              </div>
             </div>
           </div>
-          <aside class="cg-icon-panel" style="--panel-bg:url('<?php echo esc_url($bg_url); ?>')">
-            <?php if ( have_rows('icon_panel_items') ) : ?>
-              <ul class="cg-icon-panel__list">
-                <?php while ( have_rows('icon_panel_items') ) : the_row();
-                  $icon = get_sub_field('icon'); $label = get_sub_field('label'); $link = get_sub_field('link');
-                  $iurl = is_array($icon) ? $icon['url'] : $icon; $href = $link['url'] ?? '#'; $target = $link['target'] ?? '_self'; ?>
-                  <li class="cg-icon-panel__item">
-                    <a href="<?php echo esc_url($href); ?>" target="<?php echo esc_attr($target); ?>">
-                      <?php if ($iurl): ?><img src="<?php echo esc_url($iurl); ?>" alt="" loading="lazy"><?php endif; ?>
-                      <span><?php echo esc_html($label); ?></span>
-                    </a>
-                  </li>
-                <?php endwhile; ?>
-              </ul>
+          <aside class="cg-icon-panel">
+            <?php if($bg_url): ?>
+                <img src="<?php echo esc_url($bg_url); ?>" class="img-bg" />
             <?php endif; ?>
+            <div class="icon-panel-text">
+                <?php if($support_text): ?>
+                    <?php echo $support_text; ?>
+                <?php endif; ?>
+                <?php if ( have_rows('icon_panel_items') ) : ?>
+                  <ul class="cg-icon-panel__list">
+                    <?php while ( have_rows('icon_panel_items') ) : the_row();
+                      $icon = get_sub_field('icon'); $label = get_sub_field('label'); $link = get_sub_field('link');
+                      $iurl = is_array($icon) ? $icon['url'] : $icon; $href = $link['url'] ?? '#'; $target = $link['target'] ?? '_self'; ?>
+                      <li class="cg-icon-panel__item">
+                        <a href="<?php echo esc_url($href); ?>" target="<?php echo esc_attr($target); ?>">
+                          <?php if ($iurl): ?><img src="<?php echo esc_url($iurl); ?>" alt="" loading="lazy"><?php endif; ?>
+                          <span><?php echo esc_html($label); ?></span>
+                        </a>
+                      </li>
+                    <?php endwhile; ?>
+                  </ul>
+                <?php endif; ?>
+              </div>
           </aside>
         </div>
       </section>
@@ -200,11 +215,15 @@ $post_id = get_the_ID();
       <section class="cg-categories section">
         <div class="container grid-5">
           <?php while ( have_rows('categories') ) : the_row();
-            $img = get_sub_field('image'); $name = get_sub_field('name'); $link = get_sub_field('link');
+            $img = get_sub_field('image');
+            $name = get_sub_field('name');
+            $link = get_sub_field('link');
+            $content = get_sub_field('content');
             $url = $link['url'] ?? '#'; $target = $link['target'] ?? '_self'; $iurl = is_array($img) ? $img['url'] : $img; ?>
             <a class="cg-category" href="<?php echo esc_url($url); ?>" target="<?php echo esc_attr($target); ?>">
-              <?php if ($iurl): ?><img class="cg-category__img" src="<?php echo esc_url($iurl); ?>" alt="<?php echo esc_attr($name ?: ''); ?>" loading="lazy"><?php endif; ?>
-              <span class="cg-category__name"><?php echo esc_html($name); ?></span>
+              <?php if ($iurl): ?><div class="category__img"><img src="<?php echo esc_url($iurl); ?>" alt="<?php echo esc_attr($name ?: ''); ?>" loading="lazy"></div><?php endif; ?>
+              <div  class="cg-category__name"><?php echo esc_html($name); ?></div>
+              <div class="cg-category__desc"><?php echo esc_html($content); ?></div>
             </a>
           <?php endwhile; ?>
         </div>
