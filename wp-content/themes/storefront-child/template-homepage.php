@@ -235,7 +235,7 @@ $post_id = get_the_ID();
       if ( have_rows('clients') ) : ?>
       <section class="cg-logos section">
         <div class="container">
-          <?php if ($title): ?><h3 class="section__subtitle"><?php echo esc_html($title); ?></h3><?php endif; ?>
+          <?php if ($title): ?><h3 class="section__title"><?php echo esc_html($title); ?></h3><?php endif; ?>
           <div class="cg-logos__grid">
             <?php while ( have_rows('clients') ) : the_row();
               $logo = get_sub_field('logo'); $url = get_sub_field('link');

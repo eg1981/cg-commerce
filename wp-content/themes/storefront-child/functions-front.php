@@ -77,13 +77,17 @@ function storefront_header_icons(){
             <?php echo do_shortcode('[ti_wishlist_products_counter]'); ?>
         </div>    
         <div class="login-icon">
-            <span class="icon"></span>
+            <a href="<?php echo wc_get_page_permalink( 'myaccount' ); ?>"><span class="icon"></span></a>
             <?php 
                 if ( is_user_logged_in() ) {
                     $user = wp_get_current_user();
-                    echo '<p>היי, ' . esc_html( $user->first_name ) . '</p>';
+                    echo '<p><a href="'.wc_get_page_permalink( 'myaccount' ).'">היי, ' . esc_html( $user->first_name ) . '</a></p>';
+                    echo '<div class="user-drop"><div class="user-drop-inner">';
+                        echo '<a href="'.wc_get_page_permalink( 'myaccount' ).'" class="to-account">איזור אישי</a>';
+                        echo '<a href="'.esc_url( wp_logout_url( home_url('/') ) ).'" class="to-logout">יציאה</a>';
+                    echo '</div></div>';
                 } else {
-                    echo '<p>שלום אורח, התחבר.</p>';
+                    echo '<p><a href="'.wc_get_page_permalink( 'myaccount' ).'">שלום אורח, התחבר.</a></p>';
                  }
             ?>
         </div>            
@@ -129,3 +133,33 @@ add_action( 'woocommerce_after_shop_loop_item_title', function() {
     
 }, 5 );
 
+//Footer
+add_action( 'wp', 'bbloomer_remove_storefront_credits' );
+ 
+function bbloomer_remove_storefront_credits() {
+   remove_action( 'storefront_footer', 'storefront_credit', 20 );
+   add_action( 'storefront_after_footer', 'footer_bottom', 20 );
+}
+
+function footer_bottom(){
+    $footer_logo = get_field('footer_logo', 'option');
+    $footer_bottom_html = get_field('footer_bottom_html', 'option');
+    $footer_bottom_copy = get_field('footer_bottom_copy', 'option');
+    ?>
+        <div class="footer-bottom">
+            <div class="col-full">
+                <div class="footer-bottom-content">
+                    <div class="footer-logo">
+                        <img src="<?php echo $footer_logo; ?>" alt="<?php echo get_bloginfo('name'); ?>" />
+                    </div>
+                    <div class="footer-bottom-content-links">
+                        <?php echo $footer_bottom_html; ?>
+                    </div>
+                </div>
+                <div class="footer-copy">
+                        <?php echo $footer_bottom_copy; ?>
+                </div>
+            </div>
+        </div>
+    <?php
+}
