@@ -532,3 +532,47 @@ add_action('woocommerce_save_account_details', function( $user_id ){
     if ( isset($_POST['account_billing_vat_id']) )
         update_user_meta($user_id, 'billing_vat_id', sanitize_text_field($_POST['account_billing_vat_id']));
 });
+
+
+//product
+add_action( 'wp', function () {
+    if ( is_product() ) {
+        // Storefront מחבר את הסיידבר ל-storefront_sidebar
+        remove_action( 'storefront_sidebar', 'storefront_get_sidebar', 10 );
+        // למקרה ויש חיבור דרך ה-hook של WooCommerce:
+        remove_action( 'woocommerce_sidebar', 'storefront_get_sidebar', 10 );
+        remove_action( 'woocommerce_sidebar', 'woocommerce_get_sidebar', 10 );
+    }
+}, 20 );
+
+remove_action('woocommerce_single_product_summary','woocommerce_template_single_price',10);
+add_action('woocommerce_before_add_to_cart_button','woocommerce_template_single_price',5);
+
+remove_action('woocommerce_single_product_summary','woocommerce_template_single_meta',40);
+add_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_sku', 5 );
+function woocommerce_template_single_sku(){
+    global $product;
+    echo '<div class="item-sku">מק"ט: '.$product->get_sku().'</div>';
+}
+
+remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_rating', 10 );
+add_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_rating', 21 );
+
+add_action('woocommerce_before_add_to_cart_quantity','btn_qty_wrap',1);
+add_action('woocommerce_after_add_to_cart_quantity','btn_qty_wrap_end',10);
+
+function btn_qty_wrap(){
+    echo '<div class="btn_qty_wrap">';
+}
+
+function btn_qty_wrap_end(){
+    echo '</div>';
+}
+
+// עוטף את שדה הכמות בכפתורים
+add_action( 'woocommerce_before_add_to_cart_quantity', function() {
+    echo '<button type="button" class="qty-btn minus">-</button>';
+});
+add_action( 'woocommerce_after_add_to_cart_quantity', function() {
+    echo '<button type="button" class="qty-btn plus">+</button>';
+},9);

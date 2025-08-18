@@ -12,7 +12,6 @@ jQuery(document).ready(function($){
 
 //Home
 (function($){
-  $(function(){
 
     // HERO Slick
     var $hero = $('.js-hero-slider');
@@ -60,7 +59,39 @@ jQuery(document).ready(function($){
       }
     });
 
-  });
+
+document.addEventListener('click', function (e) {
+  const btn = e.target.closest('.qty-btn');           // מזהה רק כפתורי +/-
+  if (!btn) return;
+
+  const wrap  = btn.closest('.btn_qty_wrap');         // העטיפה שלך
+  const input = wrap ? wrap.querySelector('.quantity input.qty') : null;
+  if (!input) return;
+
+  const step = parseFloat(input.step) || 1;
+  const min  = input.min !== '' ? parseFloat(input.min) : 1;
+  const max  = input.max !== '' ? parseFloat(input.max) : Infinity;
+
+  // קריאה בטוחה + תמיכה בפסיק עשרוני
+  let val = parseFloat(String(input.value).replace(',', '.'));
+  if (isNaN(val)) val = min;
+
+  if (btn.classList.contains('plus'))  val += step;
+  if (btn.classList.contains('minus')) val -= step;
+
+  // גבולות + יישור ל-step
+  val = Math.max(min, Math.min(val, max));
+  val = Number((Math.round(val / step) * step).toFixed(6));
+
+  input.value = val;
+
+  // טריגרים כדי שווקומרס/וריאציות/מחיר יתעדכנו
+  input.dispatchEvent(new Event('change', { bubbles: true }));
+  input.dispatchEvent(new Event('input',  { bubbles: true }));
+});
+
+
+
 })(jQuery);
 
 document.querySelectorAll('.site-header-cart .count').forEach(function(el){
