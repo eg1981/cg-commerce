@@ -280,7 +280,7 @@ span.message-icon{
     font-weight: 300;
 }
 
-.login-icon .user-drop .user-drop-inner a.to-account{
+.login-icon .user-drop .user-drop-inner a.to_account{
     background: #F2F5F7;
     color: #003399;
 }
@@ -1495,14 +1495,280 @@ section.cg-double-banners{
 /*account*/
 @media (min-width: 768px) {
     body.page-template-template-fullwidth-php .woocommerce-MyAccount-content {
-        width: 73.9130434783%;
+        width: 76.5%;
         float: left;
         margin-left: 0;
         margin-right: 4.347826087%;
     }
     body.page-template-template-fullwidth-php .woocommerce-MyAccount-navigation {
-        width: 21.7391304348%;
+        width: 100%;
         float: right;
         margin-left: 0;
     }
+    .user-navigation{
+        width: 18.5%;
+        float: right;
+        margin-left: 0;
+        background: #F1F6FF;
+        border-radius: 5px;
+        border: 1px solid #C2D1D9;
+        padding: 14px 0 0;  
+    }
+}
+
+body.woocommerce-account .storefront-breadcrumb,
+body.woocommerce-account .entry-header,
+body.page-id-302 .storefront-breadcrumb,
+body.page-id-302 .entry-header{
+    display:none;
+}
+
+body.woocommerce-account .entry-content,
+body.page-id-302 .entry-content{
+        margin-top: 50px;
+}
+
+.user-navigation .user-initials{
+    padding: 0 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.user-navigation .user-initials span.round{
+    display: block;
+    width: 47px;
+    height: 47px;
+    background: #FFB941;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 24px;
+    line-height: 43px;
+    text-align: center;
+    font-weight: 700;
+letter-spacing: 0px;
+    padding-top: 2px;
+}
+
+.user-navigation .user-initials span:not(.round){
+    color: #424B5A;
+    font-size: 16px;
+    font-weight: 300;
+}
+
+body .hentry .entry-content .woocommerce-MyAccount-navigation ul li{
+    border-bottom: 1px solid #BDBDBD;
+    padding: 0 20px;
+}
+
+body .hentry .entry-content .woocommerce-MyAccount-navigation ul{
+    border-top: 1px solid #BDBDBD;
+    margin: 0;
+}
+
+body .woocommerce-MyAccount-navigation ul li a::before{
+    display:none
+}
+
+body .hentry .entry-content .woocommerce-MyAccount-navigation ul li.woocommerce-MyAccount-navigation-link a{
+    padding: 14px 0;
+
+}
+
+body .hentry .entry-content .woocommerce-MyAccount-navigation ul li.is-active{
+    background-color:#265697;
+}
+
+body .hentry .entry-content .woocommerce-MyAccount-navigation ul li.woocommerce-MyAccount-navigation-link.is-active a{
+    color:#fff;
+    font-weight: 600;
+}
+
+body .hentry .entry-content .woocommerce-MyAccount-navigation ul li.woocommerce-MyAccount-navigation-link.woocommerce-MyAccount-navigation-link--customer-logout{
+    border-bottom: none;
+}
+
+body .hentry .entry-content .woocommerce-MyAccount-navigation ul li.woocommerce-MyAccount-navigation-link.woocommerce-MyAccount-navigation-link--customer-logout a{
+    background: url(assets/images/log-out.svg) right 18px no-repeat;
+    color: #EB5757;
+    padding-right: 25px;
+}
+
+.login-form{
+    max-width: 405px;
+    margin: auto;
+    position: relative;
+}
+
+.login-form h2{
+    text-align: center;
+    color: #424B5A;
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 25px;
+}
+
+input[type=text]:focus, input[type=number]:focus, input[type=email]:focus, input[type=tel]:focus, input[type=url]:focus, input[type=password]:focus, input[type=search]:focus, textarea:focus, .input-text:focus,
+input[type=text], input[type=number], input[type=email], input[type=tel], input[type=url], input[type=password], input[type=search], textarea, .input-text{
+    background-color: #fff!important;
+    color: #8096a3;
+    border: 1px solid #C2D1D9;
+    -webkit-appearance: none;
+    box-sizing: border-box;
+    font-weight: 400;
+    box-shadow: none;
+    padding: 0;
+    height: 40px;
+    line-height: 40px;
+    font-size: 16px;
+    padding-right: 15px;    
+    border-radius: 5px;
+}
+
+.show-password-input{
+    background: transparent!important;
+    padding: 0!important;
+    left: 8px!important;
+    top: 8px!important;
+}
+
+.show-password-input::after{
+    color: #003399;
+}
+
+body .form-row input[type=checkbox],body .form-row input[type=radio]{
+    width: 17px;
+    height: 17px;
+    position: relative;
+    top: 3px;
+}
+
+.login-form form{
+    max-width: 260px;
+    margin: auto;
+}
+
+body .form-row .button{
+    width: 100%;
+    background: #FFB941;
+    border-radius: 5px;
+    font-weight: 400;
+    color: #000;
+    font-size: 16px;
+    padding: 0;
+    height: 40px;
+    line-height: 40px;
+}
+
+.hentry .entry-content a.woocommerce-LostPassword{
+    text-decoration: underline;
+    display: block;
+    font-size: 15px;
+    margin-top: 5px;
+}
+
+.login-form .form-row .button{
+    margin-top: 18px;
+}
+
+.to-account{
+    border-top: 1px solid #92A9B5;
+    padding-top: 30px;
+    margin-top: 45px;
+    text-align: center;
+}
+
+.to-account .title{
+    color: #424B5A;
+}
+
+.hentry .entry-content .to-account a{
+    width: 100%;
+    border-radius: 5px;
+    font-weight: 400;
+    font-size: 16px;
+    padding: 0;
+    height: 40px;
+    line-height: 40px;
+    display: block;
+    background: #003399;
+    color: #fff;
+    text-decoration: none;
+    max-width: 260px;
+    margin: 30px auto 0;
+}
+
+.login-form .remember .remember-tooltip{
+    position: absolute;
+    box-shadow: 0px 4px 15px 0px #0000001A;
+    padding: 15px;
+    background: #fff;
+    border: 1px solid #C2D1D9;
+    border-radius: 5px;
+    width: 371px;
+    max-width: 100%;
+    left: -80%;
+    top: 35%;
+    display:none;
+}
+
+.login-form .remember:hover .remember-tooltip{
+     display:block;
+}
+
+.remember-tooltip .remember-tooltip-inner .title{
+    font-weight: bold;
+    color: #505D68;
+    margin-bottom: 12px;
+}
+
+.remember-tooltip .remember-tooltip-inner .content{
+    color: #424B5A;
+    line-height: 21px;
+}
+
+body.woocommerce-account button.button{
+    width: 100%;
+    background: #FFB941;
+    border-radius: 5px;
+    font-weight: 400;
+    color: #000;
+    font-size: 16px;
+    padding: 0;
+    height: 40px;
+    line-height: 40px;
+    max-width: 260px;
+}
+
+.form-row.btn{
+    text-align: center;
+}
+
+.login-form.reg .form-row label{
+    font-size: 18px;
+    font-weight: 300;
+    color: #424B5A;
+}
+
+.login-form.reg .form-row-wide{
+    margin-bottom: 15px;
+}
+
+.login-form.reg form{
+    max-width: 333px;
+}
+
+.login-form.reg small{
+    font-size: 13px;
+    line-height: 16px;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.login-form p.desc{
+    font-size: 18px;
+    margin-bottom: 15px;
+    text-align: center;
+    line-height: 100%;
 }
