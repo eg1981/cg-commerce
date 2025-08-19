@@ -22,11 +22,14 @@ Text Domain: storefront-child
 a:focus, button:focus, .button.alt:focus, input:focus, textarea:focus, input[type="button"]:focus, input[type="reset"]:focus, input[type="submit"]:focus, input[type="email"]:focus, input[type="tel"]:focus, input[type="url"]:focus, input[type="password"]:focus, input[type="search"]:focus {
     outline: none;
 }
-body {
-    font-family: "Rubik", sans-serif;
+body {    
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
+}
+
+body, button, input, textarea{
+    font-family: "Rubik", sans-serif;
 }
 
 img{
@@ -201,6 +204,7 @@ body .site-header-cart .cart-contents .count{
     top: -5px;
     right: -7px;
     text-align: center;
+        color: #000;
 }
 
 body .site-header-cart .cart-contents .count::before {
@@ -225,6 +229,22 @@ a.wishlist_products_counter.top_wishlist-custom.no-txt{
     width:33px;
     height: 33px;
     display:block;
+    position: relative;
+}
+
+a.wishlist_products_counter.top_wishlist-custom.no-txt .wishlist_products_counter_number{
+    font-size: 11px;
+    width: 20px;
+    height: 20px;
+    background: #FFB941;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    position: absolute;
+    top: -5px;
+    right: -8px;
 }
 
 .messages-icon{
@@ -277,7 +297,7 @@ span.message-icon{
     line-height: 42px;
     text-align: center;
     font-size: 18px;
-    font-weight: 300;
+    font-weight: 400;
 }
 
 .login-icon .user-drop .user-drop-inner a.to_account{
@@ -1568,14 +1588,14 @@ body.page-id-302 .entry-content{
     line-height: 43px;
     text-align: center;
     font-weight: 700;
-letter-spacing: 0px;
+    letter-spacing: 0px;
     padding-top: 2px;
 }
 
 .user-navigation .user-initials span:not(.round){
     color: #424B5A;
     font-size: 16px;
-    font-weight: 300;
+    font-weight: 400;
 }
 
 body .hentry .entry-content .woocommerce-MyAccount-navigation ul li{
@@ -1965,4 +1985,120 @@ body.single-product div.product .woocommerce-product-rating a{
 
 .woocommerce-tabs ul.tabs li::after{
     display: none;
+}
+
+.qty_wrap{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 50px;
+}
+
+.single-product div.product .edit-link{
+    display: none;
+}
+
+.qty_wrap .qty-title{
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.btn_qty_wrap{
+    display: flex;
+    border: 1px solid #C2D1D9;
+    flex-direction: row-reverse;
+    width: 118px;
+    height: 40px;
+    padding: 0 10px;
+}
+
+.btn_qty_wrap button{
+    padding: 0;
+    background: transparent;
+    width: 15%;
+    color: #003399;
+    font-size: 24px;
+    font-weight: 400;
+}
+
+body.single-product div.product form.cart .quantity{
+    float: none;
+    margin-left: 0;
+    width: 70%;
+}
+
+body.single-product .quantity .qty {
+    width: 100%;
+    text-align: center;
+    border: none;
+    height: 100%;
+    color: #505D68;
+    font-size: 18px;
+    padding: 0;
+}
+
+body .site-content>.col-full>.woocommerce>.woocommerce-message:first-child,
+body .site-content>.col-full>.woocommerce>.woocommerce-info:first-child,
+body .site-content>.col-full>.woocommerce>.woocommerce-error:first-child {
+    margin-top: 0;
+}
+
+.single-product div.product form.cart button.single_add_to_cart_button{
+        width: 100%;
+    background: #FFB941;
+    border-radius: 5px;
+    margin-top: 24px;
+    font-size: 18px;
+    padding: 0;
+    height: 40px;
+    line-height: 40px;
+    font-weight: 400;
+    color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.single-product div.product form.cart button.single_add_to_cart_button:before {
+    content: "";
+    background: url(assets/images/cart.svg) 0 0px no-repeat;
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    background-size: 18px;
+}
+
+.single-product div.product .variations_button{
+    position: absolute;
+    width: 287px;
+    left: 0;
+    top: 0;
+    box-shadow: 0px 4px 15px 0px #0000001A;
+    padding: 18px;
+    border: 1px solid #C2D1D9;
+    border-radius: 5px;
+}
+
+.woocommerce div.product span.onsale{
+        z-index: 100;
+    position: absolute;
+    background: #FFB941;
+    border: none;
+    border-radius: 0;
+    top: 8px;
+    right: 0;
+    color: #000;
+    font-size: 16px;
+    padding: 0;
+    margin: 0;
+    width: 69px;
+    height: 27px;
+    line-height: 27px;
+    font-weight: 400;
+    text-align: center;
+}
+
+.single-product .woocommerce-variation-price{
+    display:none!important
 }

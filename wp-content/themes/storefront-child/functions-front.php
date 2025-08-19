@@ -562,11 +562,13 @@ add_action('woocommerce_before_add_to_cart_quantity','btn_qty_wrap',1);
 add_action('woocommerce_after_add_to_cart_quantity','btn_qty_wrap_end',10);
 
 function btn_qty_wrap(){
+    echo '<div class="qty_wrap">';
+    echo '<div class="qty-title">כמות</div>';
     echo '<div class="btn_qty_wrap">';
 }
 
 function btn_qty_wrap_end(){
-    echo '</div>';
+    echo '</div></div>';
 }
 
 // עוטף את שדה הכמות בכפתורים
@@ -576,3 +578,73 @@ add_action( 'woocommerce_before_add_to_cart_quantity', function() {
 add_action( 'woocommerce_after_add_to_cart_quantity', function() {
     echo '<button type="button" class="qty-btn plus">+</button>';
 },9);
+
+// "החל מ" במוצרי וריאציות + תמיכת מבצע
+add_filter('woocommerce_variable_price_html', function( $price_html, $product ) {
+
+    if ( ! $product instanceof WC_Product_Variable ) {
+        return $price_html;
+    }
+
+    // כל המחירים של הווריאציות (לפי הגדרות מס)
+    $prices = $product->get_variation_prices( true ); // true = כולל מיון לפי מחיר מוצג
+
+    if ( empty( $prices['price'] ) ) {
+        return $price_html;
+    }
+
+    // המינימומים
+    $min_price        = current( $prices['price'] );          // המחיר בפועל (כולל מבצע אם יש)
+    $min_regular      = ! empty( $prices['regular_price'] ) ? current( $prices['regular_price'] ) : $min_price;
+    $min_sale_prices  = ! empty( $prices['sale_price'] ) ? array_filter( $prices['sale_price'] ) : [];
+    $min_sale         = $min_sale_prices ? current( $min_sale_prices ) : 0;
+
+    // תצוגה: אם יש מבצע אמיתי (מחיר מבצע נמוך ממחיר רגיל)
+    if ( $min_sale && $min_sale < $min_regular ) {
+        $html = sprintf(
+            /* translators: starting-from price with sale */
+            __('החל מ %1$s %2$s', 'your-textdomain'),
+            '<del>' . wc_price( $min_regular ) . '</del>',
+            '<ins>' . wc_price( $min_sale ) . '</ins>'
+        );
+    } else {
+        $html = sprintf(
+            /* translators: starting-from price */
+            __('החל מ %s', 'your-textdomain'),
+            wc_price( $min_price )
+        );
+    }
+
+    // עטיפה בקלאס סטנדרטי של ווקומרס
+    return '<span class="price">' . $html . '</span>';
+
+}, 10, 2);
+
+add_action('wp_footer', function () {
+  if ( ! is_product() ) return; ?>
+  <script>
+  (function($){
+    var $form = $('form.variations_form');
+    if(!$form.length) return;
+
+    // אלמנט המחיר הראשי (תמיכה ברוב התבניות)
+    var $mainPrice = $('.summary .price, .product .summary p.price').first();
+    if(!$mainPrice.length) return;
+
+    var defaultHtml = $mainPrice.html(); // "החל מ …" ברירת מחדל
+
+    // כשנמצאת וריאציה → החלפת המחיר הראשי במחיר הווריאציה (כולל מבצע)
+    $form.on('found_variation', function(e, variation){
+      if (variation && variation.price_html) {
+        $mainPrice.html(variation.price_html);
+      }
+    });
+
+    // איפוס בחירה → החזרת "החל מ …"
+    $form.on('reset_data hide_variation', function(){
+      $mainPrice.html(defaultHtml);
+    });
+  })(jQuery);
+  </script>
+  <?php
+});
