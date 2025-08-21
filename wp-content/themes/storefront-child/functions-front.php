@@ -536,13 +536,13 @@ add_action('woocommerce_save_account_details', function( $user_id ){
 
 //product
 add_action( 'wp', function () {
-    if ( is_product() ) {
+    //if ( is_product() ) {
         // Storefront מחבר את הסיידבר ל-storefront_sidebar
         remove_action( 'storefront_sidebar', 'storefront_get_sidebar', 10 );
         // למקרה ויש חיבור דרך ה-hook של WooCommerce:
         remove_action( 'woocommerce_sidebar', 'storefront_get_sidebar', 10 );
         remove_action( 'woocommerce_sidebar', 'woocommerce_get_sidebar', 10 );
-    }
+    //}
 }, 20 );
 
 remove_action('woocommerce_single_product_summary','woocommerce_template_single_price',10);
@@ -557,7 +557,7 @@ function woocommerce_template_single_sku(){
 
 remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_rating', 10 );
 add_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_rating', 21 );
-add_action( 'woocommerce_single_product_summary', 'add_review_ask', 22 );
+add_action( 'woocommerce_single_product_summary', 'add_review_ask', 30 );
 add_action( 'woocommerce_after_add_to_cart_button', 'under_add_to_cart', 10 );
 
 function add_review_ask(){
@@ -731,3 +731,37 @@ function acf_custom_tab_content() {
 //review tab
 remove_action( 'woocommerce_review_before','woocommerce_review_display_gravatar',10);
 remove_action( 'woocommerce_review_before_comment_meta','woocommerce_review_display_rating',10);
+
+add_action( 'woocommerce_before_variations_form', 'variation_title', 10 );
+function variation_title(){
+    echo '<div class="variation_title">הגדר את האפשרויות שלך:</div>';
+}
+
+//category
+add_action('woocommerce_before_shop_loop','shop_loop_side_wrap',5);
+add_action('woocommerce_before_shop_loop','shop_loop_filter',30);
+add_action('woocommerce_before_shop_loop','shop_loop_side_wrap_end',40);
+add_action('woocommerce_after_shop_loop','shop_loop_wrap_end',5);
+add_action('woocommerce_shop_loop_header','filter_selected_area',15);
+
+function shop_loop_side_wrap(){
+    echo '<div class="shop_loop_wrap"><div class="shop_loop_side_wrap">';
+}
+
+function shop_loop_side_wrap_end(){
+    echo '</div>';
+}
+
+function shop_loop_wrap_end(){
+    echo '</div>';
+}
+
+function shop_loop_filter(){
+    echo do_shortcode('[br_filters_group group_id=338]');
+}
+
+function filter_selected_area(){
+    echo '<div class="filter_selected_area">';
+    echo do_shortcode('[br_filter_single filter_id=340]');
+    echo '</div>';
+}
