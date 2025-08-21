@@ -557,6 +557,39 @@ function woocommerce_template_single_sku(){
 
 remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_rating', 10 );
 add_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_rating', 21 );
+add_action( 'woocommerce_single_product_summary', 'add_review_ask', 22 );
+add_action( 'woocommerce_after_add_to_cart_button', 'under_add_to_cart', 10 );
+
+function add_review_ask(){
+    global $product;
+    ?>
+        <div class="review-ask">
+            <div class="review-add">
+                <a href="#reviews" class="woocommerce-review-link" rel="nofollow"><span>הוסף חוות דעת</span></a>
+            </div>
+            <div class="ask">
+                <a href="#" rel="nofollow"><span>שאלו אותנו על מוצר זה<br/>השאירו פרטים ונחזור בהקדם</span></a>
+            </div>            
+        </div>
+    <?php
+}
+
+function under_add_to_cart(){
+    global $product;
+    ?>
+        <div class="under-add-to-cart">
+            <div class="wish-add">
+                <?php echo do_shortcode('[ti_wishlists_addtowishlist]'); ?>
+            </div>
+            <div class="wish-add share">
+                <a href="#"><span>שיתוף</span></a>
+            </div>                    
+        </div>
+        <div class="compare-add">
+            <?php echo do_shortcode('[br_compare_button]'); ?>
+        </div>          
+    <?php
+}
 
 add_action('woocommerce_before_add_to_cart_quantity','btn_qty_wrap',1);
 add_action('woocommerce_after_add_to_cart_quantity','btn_qty_wrap_end',10);
@@ -648,3 +681,53 @@ add_action('wp_footer', function () {
   </script>
   <?php
 });
+
+
+add_filter( 'woocommerce_product_tabs', 'eran_acf_custom_tab' );
+function eran_acf_custom_tab( $tabs ) {
+
+    // רק אם יש תוכן בשדה – נוסיף את הטאב
+        $tabs['extra_info'] = array(
+            'title'    => __( 'תמיכה והורדות', 'your-textdomain' ),
+            'priority' => 50,
+            'callback' => 'acf_custom_tab_content'
+        );
+
+    return $tabs;
+}
+
+function acf_custom_tab_content() {
+    global $product;
+
+    $driver = get_field('driver', $product->get_id());
+    $guide = get_field('guide', $product->get_id());
+    $admin_email = get_option( 'admin_email' );
+
+    if ( $driver || $guide ) {
+        echo '<div class="title">הורדות</div>';
+    }
+
+    if ( $driver ) {
+        echo '<div class="acf-product-tab">';
+            echo '<div>הורדה של דרייברים</div>';
+            echo '<a href="'.$driver['url'].'" target="_blank">הורדה של דרייברים</a>';
+        echo '</div>';
+    }
+
+    if ( $guide ) {
+        echo '<div class="acf-product-tab">';
+            echo '<div>הורדה של מדריכים</div>';
+            echo '<a href="'.$guide['url'].'" target="_blank">הורדה של מדריכים</a>';
+        echo '</div>';
+    }    
+
+    echo '<div class="acf-product-tab">';
+        echo '<div>תמיכה טכנית</div>';
+        echo '<div class="sub">כתובת הדוא"ל של התמיכה הטכנית:</div>';
+        echo '<a href="mailto:'.$admin_email.'">'.$admin_email.'</a>';
+    echo '</div>';
+}
+
+//review tab
+remove_action( 'woocommerce_review_before','woocommerce_review_display_gravatar',10);
+remove_action( 'woocommerce_review_before_comment_meta','woocommerce_review_display_rating',10);
