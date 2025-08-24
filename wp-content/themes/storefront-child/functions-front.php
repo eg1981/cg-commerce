@@ -742,7 +742,7 @@ add_action('woocommerce_before_shop_loop','shop_loop_side_wrap',5);
 add_action('woocommerce_before_shop_loop','shop_loop_filter',30);
 add_action('woocommerce_before_shop_loop','shop_loop_side_wrap_end',40);
 add_action('woocommerce_after_shop_loop','shop_loop_wrap_end',5);
-add_action('woocommerce_shop_loop_header','filter_selected_area',15);
+add_action('woocommerce_shop_loop_header','filter_selected_area',50);
 
 function shop_loop_side_wrap(){
     echo '<div class="shop_loop_wrap"><div class="shop_loop_side_wrap">';
@@ -757,6 +757,7 @@ function shop_loop_wrap_end(){
 }
 
 function shop_loop_filter(){
+    echo '<div class="filter-title">סינון לפי:</div>';
     echo do_shortcode('[br_filters_group group_id=338]');
 }
 
@@ -764,4 +765,30 @@ function filter_selected_area(){
     echo '<div class="filter_selected_area">';
     echo do_shortcode('[br_filter_single filter_id=340]');
     echo '</div>';
+}
+
+//category header
+add_action('woocommerce_shop_loop_header','shop_header_wrap',5);
+add_action('woocommerce_shop_loop_header','shop_header_img',15);
+add_action('woocommerce_shop_loop_header','shop_header_wrap_end',20);
+
+function shop_header_wrap(){
+    echo '<div class="shop_header_wrap">';
+}
+
+function shop_header_wrap_end(){
+    echo '</div>';
+}
+
+function shop_header_img(){
+    if ( is_product_category() ) {
+        $term = get_queried_object(); // הקטגוריה הנוכחית
+        if ( $term && isset( $term->term_id ) ) {
+            $thumbnail_id = get_term_meta( $term->term_id, 'thumbnail_id', true );
+            if ( $thumbnail_id ) {
+                // תמונה בגודל של WooCommerce (רספונסיבי)
+                echo '<div class="cat-img">'.wp_get_attachment_image( $thumbnail_id, 'woocommerce_thumbnail', false, ['alt' => esc_attr( $term->name )]).'</div>';
+            }
+        }
+    }
 }
