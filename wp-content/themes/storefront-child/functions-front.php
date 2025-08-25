@@ -266,80 +266,81 @@ add_shortcode('wc_custom_register', function () {
       </p>
       <div class="clear"></div>
 
-      <!-- 3) דואר אלקטרוני (שדה ליבה של WC) -->
+      <!-- 3) דואר אלקטרוני -->
       <p class="form-row form-row-wide">
         <label for="reg_email"><?php esc_html_e('דואר אלקטרוני','woocommerce'); ?> <span class="required">*</span></label>
         <input type="email" class="input-text" name="email" id="reg_email" autocomplete="email"
                value="<?php echo isset($_POST['email']) ? esc_attr( wp_unslash($_POST['email']) ) : ''; ?>" required />
       </p>
 
-      <!-- 4) סיסמה (לפי הכללים) -->
-        <p class="form-row form-row-wide">            
-            <label for="reg_password"><?php esc_html_e('סיסמה','woocommerce'); ?> <span class="required">*</span></label>
-            <small>(יש לכלול לפחות 8 תווים ללא רווחים, מספרים ואותיות באנגלית, לפחות אות אחת גדולה וסימן מיוחד.)</small>
-            <span class="password-input">
-                <input type="password" class="input-text" name="password" id="reg_password" autocomplete="new-password" required />
-                <span class="show-password-input"></span>
-            </span>
-        </p>
-
-        <!-- אימות סיסמה -->
-        <p class="form-row form-row-wide">            
-             <label for="reg_password2"><?php esc_html_e('אימות סיסמה','woocommerce'); ?> <span class="required">*</span></label>
-             <span class="password-input">
-              <input type="password" class="input-text" name="password2" id="reg_password2" required />
-              <span class="show-password-input"></span>
-           </span> 
-        </p>
-
-      <!-- 6) מספר טלפון -->
+      <!-- 4) סיסמה -->
       <p class="form-row form-row-wide">
-        <label for="reg_phone"><?php esc_html_e('מספר טלפון','woocommerce'); ?> <span class="required">*</span></label>
-        <input type="tel" class="input-text" name="phone" id="reg_phone"
-               value="<?php echo !empty($_POST['phone']) ? esc_attr($_POST['phone']) : ''; ?>" required />
+        <label for="reg_password"><?php esc_html_e('סיסמה','woocommerce'); ?> <span class="required">*</span></label>
+        <small>(יש לכלול לפחות 8 תווים ללא רווחים, מספרים ואותיות באנגלית, לפחות אות אחת גדולה וסימן מיוחד.)</small>
+        <span class="password-input">
+            <input type="password" class="input-text" name="password" id="reg_password" autocomplete="new-password" required />
+            <span class="show-password-input"></span>
+        </span>
       </p>
 
-      <!-- 7) שם חברה -->
+      <!-- 5) אימות סיסמה -->
       <p class="form-row form-row-wide">
-        <label for="reg_company"><?php esc_html_e('שם חברה','woocommerce'); ?></label>
-        <input type="text" class="input-text" name="company" id="reg_company"
-               value="<?php echo !empty($_POST['company']) ? esc_attr($_POST['company']) : ''; ?>" />
+        <label for="reg_password2"><?php esc_html_e('אימות סיסמה','woocommerce'); ?> <span class="required">*</span></label>
+        <span class="password-input">
+          <input type="password" class="input-text" name="password2" id="reg_password2" required />
+          <span class="show-password-input"></span>
+        </span>
       </p>
 
-      <!-- 8) ח.פ -->
+      <!-- 6) מספר טלפון (שדה ליבה: billing_phone) -->
       <p class="form-row form-row-wide">
-        <label for="reg_vatid"><?php esc_html_e('ח.פ','woocommerce'); ?></label>
-        <input type="text" class="input-text" name="vatid" id="reg_vatid"
-               value="<?php echo !empty($_POST['vatid']) ? esc_attr($_POST['vatid']) : ''; ?>" />
+        <label for="reg_billing_phone"><?php esc_html_e('מספר טלפון','woocommerce'); ?> <span class="required">*</span></label>
+        <input type="tel" class="input-text" name="billing_phone" id="reg_billing_phone"
+               value="<?php echo !empty($_POST['billing_phone']) ? esc_attr($_POST['billing_phone']) : ''; ?>" required />
       </p>
 
-        <p class="form-row form-row-wide">
-            <span class="required">*</span> שדות חובה
-        </p>
+      <!-- 7) שם חברה (שדה ליבה: billing_company) -->
+      <p class="form-row form-row-wide">
+        <label for="reg_billing_company"><?php esc_html_e('שם חברה','woocommerce'); ?></label>
+        <input type="text" class="input-text" name="billing_company" id="reg_billing_company"
+               value="<?php echo !empty($_POST['billing_company']) ? esc_attr($_POST['billing_company']) : ''; ?>" />
+      </p>
+
+      <!-- 8) ח.פ (מותאם אישית; אפשר להשאיר כ-billing_vat_id) -->
+      <p class="form-row form-row-wide">
+        <label for="reg_billing_vat_id"><?php esc_html_e('ח.פ','woocommerce'); ?></label>
+        <input type="text" class="input-text" name="billing_vat_id" id="reg_billing_vat_id"
+               value="<?php echo !empty($_POST['billing_vat_id']) ? esc_attr($_POST['billing_vat_id']) : ''; ?>" />
+      </p>
+
+      <p class="form-row form-row-wide">
+        <span class="required">*</span> שדות חובה
+      </p>
+
       <!-- תנאים -->
       <p class="form-row form-row-wide">
         <label class="woocommerce-form__label woocommerce-form__label-for-checkbox">
           <input type="checkbox" class="woocommerce-form__input woocommerce-form__input-checkbox" name="terms" id="reg_terms" value="1"
                  <?php checked( !empty($_POST['terms']), 1 ); ?> />
-              <span>
-                <?php 
-                printf(
-                    __('אני מאשר שקראתי את <a href="%s" target="_blank" style="color:#4279D4;">תקנון האתר</a>', 'woocommerce'),
-                    esc_url( get_permalink( get_page_by_path('terms') ) )
-                );
-                ?>
-                </span>
+          <span>
+            <?php 
+            printf(
+              __('אני מאשר שקראתי את <a href="%s" target="_blank" style="color:#4279D4;">תקנון האתר</a>', 'woocommerce'),
+              esc_url( get_permalink( get_page_by_path('terms') ) )
+            );
+            ?>
+          </span>
         </label>
       </p>
 
       <?php do_action('woocommerce_register_form_end'); ?>
       <?php wp_nonce_field('woocommerce-register','woocommerce-register-nonce'); ?>
-    
+
       <p class="form-row">
         <button type="submit" class="woocommerce-Button button" name="register">
             <?php esc_html_e('יצירת חשבון','woocommerce'); ?>
         </button>
-        </p>
+      </p>
     </form>
 
     </div>
@@ -356,9 +357,9 @@ add_action('woocommerce_register_post', function($username, $email, $errors){
     if ( empty($_POST['first_name']) ) $errors->add('first_name_error', __('יש למלא שם פרטי.', 'woocommerce'));
     if ( empty($_POST['last_name']) )  $errors->add('last_name_error',  __('יש למלא שם משפחה.', 'woocommerce'));
 
-    // טלפון
-    if ( empty($_POST['phone']) ) {
-        $errors->add('phone_error', __('יש למלא מספר טלפון.', 'woocommerce'));
+    // טלפון (שדה ליבה)
+    if ( empty($_POST['billing_phone']) ) {
+        $errors->add('billing_phone_error', __('יש למלא מספר טלפון.', 'woocommerce'));
     }
 
     // אימות סיסמה
@@ -391,14 +392,21 @@ add_action('woocommerce_register_post', function($username, $email, $errors){
 
 /**
  * שמירת נתוני משתמש לאחר יצירה
+ * משתמש במפתחות המקוריים של Woo: billing_*
  */
 add_action('woocommerce_created_customer', function($customer_id){
-    if ( isset($_POST['first_name']) ) update_user_meta($customer_id, 'first_name',       sanitize_text_field($_POST['first_name']));
-    if ( isset($_POST['last_name']) )  update_user_meta($customer_id, 'last_name',        sanitize_text_field($_POST['last_name']));
-    if ( isset($_POST['phone']) )      update_user_meta($customer_id, 'billing_phone',    sanitize_text_field($_POST['phone']));
-    if ( isset($_POST['company']) )    update_user_meta($customer_id, 'billing_company',  sanitize_text_field($_POST['company']));
-    if ( isset($_POST['vatid']) )      update_user_meta($customer_id, 'billing_vat_id',   sanitize_text_field($_POST['vatid']));
+    if ( isset($_POST['first_name']) )       update_user_meta($customer_id, 'first_name',        sanitize_text_field($_POST['first_name']));
+    if ( isset($_POST['last_name']) )        update_user_meta($customer_id, 'last_name',         sanitize_text_field($_POST['last_name']));
+    if ( isset($_POST['billing_phone']) )    update_user_meta($customer_id, 'billing_phone',     sanitize_text_field($_POST['billing_phone']));
+    if ( isset($_POST['billing_company']) )  update_user_meta($customer_id, 'billing_company',   sanitize_text_field($_POST['billing_company']));
+    if ( isset($_POST['billing_vat_id']) )   update_user_meta($customer_id, 'billing_vat_id',    sanitize_text_field($_POST['billing_vat_id']));
 });
+
+add_filter('woocommerce_billing_fields', function($fields){
+  if ( isset($fields['billing_phone']) ) $fields['billing_phone']['required'] = true;
+  return $fields;
+});
+
 
 /**
  * טעינת JS+CSS לעמוד ההרשמה/החשבון כאשר לא מחוברים

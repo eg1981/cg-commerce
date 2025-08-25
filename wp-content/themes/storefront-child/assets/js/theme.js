@@ -94,6 +94,21 @@ document.addEventListener('click', function (e) {
 
 })(jQuery);
 
-document.querySelectorAll('.site-header-cart .count').forEach(function(el){
-    el.setAttribute('data-count', el.textContent.replace(/\D/g, ''));
+jQuery(function($){
+
+    function updateMiniCartCountAttr() {
+        $('.site-header-cart .count').each(function(){
+            var count = $(this).text().replace(/\D/g, '');
+            $(this).attr('data-count', count);
+        });
+    }
+
+    // להריץ בהתחלה
+    updateMiniCartCountAttr();
+
+    // להריץ בכל פעם שהסל מתעדכן
+    $(document.body).on('wc_fragments_refreshed wc_fragments_loaded added_to_cart', function () {
+        updateMiniCartCountAttr();
+    });
+
 });

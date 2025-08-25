@@ -44,6 +44,7 @@ $acc_name    = trim( $customer->get_first_name() . ' ' . $customer->get_last_nam
 $acc_email   = $customer->get_email();
 $acc_company = $customer->get_billing_company();
 $acc_phone   = $customer->get_billing_phone();
+$acc_vat   = $customer->get_meta('billing_vat_id');
 
 // Shipping
 $shipping = [
@@ -86,19 +87,20 @@ $build_map_q = function( $arr ) {
 
   <!-- פרטי חשבון -->
   <section class="wc-section wc-section--account">
-    <header class="wc-section__header">>פרטי חשבון</header>
+    <header class="wc-section__header">פרטי חשבון</header>
 
     <div class="wc-section__body">
         <ul class="wc-list wc-list--kv">
             <li><span class="kv__key">שם:</span> <span class="kv__val"><?php echo $val($acc_name); ?></span></li>
             <li><span class="kv__key">חברה:</span> <span class="kv__val"><?php echo $val($acc_company); ?></span></li>
             <li><span class="kv__key">דוא״ל:</span> <span class="kv__val"><?php echo $val($acc_email); ?></span></li>
+            <li><span class="kv__key">ח"פ:</span> <span class="kv__val"><?php echo $val($acc_vat); ?></span></li>
             <li><span class="kv__key">טלפון:</span> <span class="kv__val"><?php echo $val($acc_phone); ?></span></li>
         </ul>
 
-        <div class="wc-actions">
+        <!--<div class="wc-actions">
             <a class="btn" href="<?php echo esc_url( $edit_account_url ); ?>">עדכון פרטי חשבון / סיסמה</a>
-        </div>
+        </div>-->
         <div class="btn-edit">
             <a class="btn btn--small" href="<?php echo esc_url( $edit_account_url ); ?>">עריכה</a>
         </div>
@@ -137,25 +139,6 @@ $build_map_q = function( $arr ) {
       </div>    
   </section>
 
-  <!-- כתובת למשלוח -->
-  <section class="wc-section wc-section--shipping">
-    <header class="wc-section__header">כתובת למשלוח</header>
-
-    <div class="wc-section__body">
-      <ul class="wc-list wc-list--kv">
-        <li><span class="kv__key">שם:</span> <span class="kv__val"><?php echo $val($shipping['name']); ?></span></li>
-        <li><span class="kv__key">חברה:</span> <span class="kv__val"><?php echo $val($shipping['company']); ?></span></li>
-        <li><span class="kv__key">עיר:</span> <span class="kv__val"><?php echo $val($shipping['city']); ?></span></li>
-        <li><span class="kv__key">כתובת:</span> <span class="kv__val"><?php echo $val(trim($shipping['address_1'] . ' ' . $shipping['address_2'])); ?></span></li>
-        <li><span class="kv__key">מיקוד:</span> <span class="kv__val"><?php echo $val($shipping['postcode']); ?></span></li>
-        <li><span class="kv__key">טלפון:</span> <span class="kv__val"><?php echo $val($shipping['phone']); ?></span></li>
-      </ul>
-      <div class="btn-edit">
-        <a class="btn btn--small" href="<?php echo esc_url( $edit_shipping_url ); ?>">עריכה</a>
-      </div>      
-    </div>
-  </section>
-
   <!-- כתובת לחיוב -->
   <section class="wc-section wc-section--billing">
     <header class="wc-section__header">כתובת לחיוב</header>
@@ -171,6 +154,25 @@ $build_map_q = function( $arr ) {
       </ul>
       <div class="btn-edit">
         <a class="btn btn--small" href="<?php echo esc_url( $edit_billing_url ); ?>">עריכה</a>
+      </div>      
+    </div>
+  </section>
+
+    <!-- כתובת למשלוח -->
+  <section class="wc-section wc-section--shipping">
+    <header class="wc-section__header">כתובת למשלוח</header>
+
+    <div class="wc-section__body">
+      <ul class="wc-list wc-list--kv">
+        <li><span class="kv__key">שם:</span> <span class="kv__val"><?php echo $val($shipping['name']); ?></span></li>
+        <li><span class="kv__key">חברה:</span> <span class="kv__val"><?php echo $val($shipping['company']); ?></span></li>
+        <li><span class="kv__key">עיר:</span> <span class="kv__val"><?php echo $val($shipping['city']); ?></span></li>
+        <li><span class="kv__key">כתובת:</span> <span class="kv__val"><?php echo $val(trim($shipping['address_1'] . ' ' . $shipping['address_2'])); ?></span></li>
+        <li><span class="kv__key">מיקוד:</span> <span class="kv__val"><?php echo $val($shipping['postcode']); ?></span></li>
+        <li><span class="kv__key">טלפון:</span> <span class="kv__val"><?php echo $val($shipping['phone']); ?></span></li>
+      </ul>
+      <div class="btn-edit">
+        <a class="btn btn--small" href="<?php echo esc_url( $edit_shipping_url ); ?>">עריכה</a>
       </div>      
     </div>
   </section>

@@ -1851,6 +1851,10 @@ body.woocommerce-account button.button{
     margin-bottom: 15px;
 }
 
+.login-form.reg .form-row-wide .field-error{
+    color: red;
+}
+
 .login-form.reg form{
     max-width: 333px;
 }
@@ -2116,7 +2120,8 @@ body.single-product .quantity .qty {
 body .site-content>.col-full>.woocommerce>.woocommerce-message:first-child,
 body .site-content>.col-full>.woocommerce>.woocommerce-info:first-child,
 body .site-content>.col-full>.woocommerce>.woocommerce-error:first-child {
-    margin-top: 0;
+    margin-top: 15px;
+    margin-bottom: 0;
 }
 
 .single-product div.product form.cart button.single_add_to_cart_button{
@@ -2668,9 +2673,228 @@ body ul.products::before, body ul.products::after{
 .wc-account-dashboard .wc-section{
     border: 1px solid #92A9B5;
     border-radius: 5px;
+    margin-bottom: 20px;
 }
 
 .wc-account-dashboard .wc-section .wc-section__header{
     background: #003399;
     color: #fff;
+    padding: 3px 20px;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.wc-account-dashboard{
+    max-width: 924px;
+}
+
+.wc-account-dashboard .wc-section__body{
+    padding: 20px;
+}
+
+.wc-account-dashboard .wc-section__body .wc-list{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    column-count: 2;
+}
+
+.wc-account-dashboard .wc-section__body .wc-list li{
+    font-size: 18px;
+    display: flex;
+    margin-bottom: 5px;
+    gap: 10px;
+}
+
+.wc-account-dashboard .wc-section__body .wc-list li .kv__key{
+    font-weight: 500;
+}
+
+.wc-account-dashboard .wc-section__body .wc-list li .kv__val{
+    color: #424B5A;
+}
+
+.wc-account-dashboard .wc-section__body .btn-edit{
+    margin-top: 15px;
+}
+
+.wc-account-dashboard .wc-section__body .btn-edit a{
+    text-decoration: none;
+    display: block;
+    width: 115px;
+    height: 35px;
+    line-height: 33px;
+    text-align: center;
+    background: #F1F6FF url(assets/images/edit.svg) right 20px top 7px no-repeat;
+    border: 1px solid #003399;
+    border-radius: 5px;
+    color: #003399;
+    padding-right: 20px;
+}
+
+body .col2-set.addresses{
+    display: flex;
+    flex-direction: column;
+}
+
+body.page-template-template-fullwidth-php .woocommerce-MyAccount-content .col2-set .col-1,
+body.page-template-template-fullwidth-php .woocommerce-MyAccount-content .col2-set .col-2{
+    width: 100%;
+    float: right;
+    margin-left: 0;
+    border: 1px solid #92A9B5;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+body.page-template-template-fullwidth-php .woocommerce-MyAccount-content .col2-set{
+    max-width: 924px;
+}
+
+header.woocommerce-Address-title{
+    background: #003399;
+    color: #fff;
+    padding: 3px 20px;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+header.woocommerce-Address-title h2{
+    font-size: 18px;
+    font-weight: 500;
+    color: #fff;
+    margin: 0;
+}
+
+header.woocommerce-Address-title a.edit,
+body .addresses header.title a{
+    text-decoration: none;
+    display: block;
+    min-width: 115px;
+    height: 35px;
+    line-height: 33px;
+    text-align: center;
+    background: #F1F6FF url(assets/images/edit.svg) right 13px top 7px no-repeat;
+    border: 1px solid #003399;
+    border-radius: 5px;
+    color: #003399;
+    padding: 0 38px 0 15px;
+    text-indent: unset;
+    margin: 0;
+    font-size: 16px;
+    font-weight: normal;
+    width: auto;
+    position: absolute;
+    bottom: 15px;
+}
+
+header.woocommerce-Address-title a.edit::before,
+body .addresses header.title a::before{
+    display: none;
+}
+
+body .addresses address{
+    margin: 0;
+    padding: 20px;
+    padding-bottom: 65px;
+    font-style: normal;
+    color: #424B5A;
+}
+
+.wc-account-dashboard.orders {
+    max-width: 100%;
+}
+
+.wc-account-dashboard.orders .wc-section__body {
+    padding: 0;
+}
+
+.wc-account-dashboard.orders .wc-section__body table thead th{
+    background-color: #E3F2FB;
+    padding: 20px;
+    color: #003399;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.wc-account-dashboard.orders .wc-section__body table.shop_table_responsive tr td{
+    font-size: 18px;
+    color: #424B5A;
+    font-weight: 300;
+}
+
+.wc-account-dashboard.orders .wc-section__body table.shop_table_responsive tr td.order-toggle button{
+    text-decoration: none;
+    display: block;
+    width: 110px;
+    height: 35px;
+    line-height: 33px;
+    text-align: center;
+    background: #F1F6FF url(assets/images/toggle-down.svg) left 18px top 14px no-repeat;
+    border: 1px solid #003399;
+    border-radius: 5px;
+    color: #003399;
+    margin: auto;
+    font-weight: 400;
+    padding: 0;
+    padding-left: 15px;
+    font-size: 16px;
+}
+
+.wc-account-dashboard.orders .wc-section__body table.shop_table_responsive tr td.order-toggle button[aria-expanded="true"]{
+    background: #003399 url(assets/images/toggle-up.svg) left 18px top 14px no-repeat;
+    border-color: #003399;
+    color: #fff;
+}
+
+.wc-account-dashboard.orders .wc-section__body table.shop_table_responsive tr.order-details td{
+    background: #F1F6FF;
+    padding: 7px 20px;
+    color: #333333;
+}
+
+.wc-account-dashboard.orders .wc-section__body table.shop_table_responsive tr.order-details td.item-name,
+.wc-account-dashboard.orders .wc-section__body table.shop_table_responsive tr.order-details td span.title{
+    font-weight: 500;
+}
+
+.wc-account-dashboard.orders .wc-section__body .order-items{
+    border-bottom: 1px solid #BDBDBD;
+    margin-bottom: 15px;
+}
+
+.wc-account-dashboard.orders .wc-section__body .order-items table{
+    margin-bottom: 15px;
+}
+
+.wc-account-dashboard .wc-section__body .wc-list li .kv__val.addr{
+    word-spacing: 3px;
+}
+
+.wc-account-dashboard .wc-section__body .wc-list li .kv__val.addr br{
+    display: none;
+}
+
+body table.my_account_orders{
+    margin: 0;
+}
+
+.wc-account-dashboard.orders .wc-section__body table.shop_table_responsive tr.order-details td.item-thumb img{
+    width: 40px;
+    border: 1px solid #C2D1D9;
+    border-radius: 5px;
+}
+
+.wc-account-dashboard.orders .wc-section__body table.shop_table_responsive tr.order-details td.item-thumb{
+    padding-left: 0;
+}
+
+.wc-account-dashboard.orders .wc-section__body table.shop_table_responsive tr.order-details .order-extras,
+.wc-account-dashboard.orders .wc-section__body table.shop_table_responsive tr.order-details .order-totals{
+    padding: 0 20px;
+}
+
+.wc-account-dashboard.orders .wc-section__body table.shop_table_responsive tr.order-details>td{
+    padding-right: 0;
 }
