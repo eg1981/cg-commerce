@@ -96,15 +96,12 @@ $post_id = get_the_ID();
             $text   = get_sub_field('text');
             $printer= get_sub_field('printer_image');
             $link   = get_sub_field('link');
-            $bg_url = is_array($bg) ? $bg['url'] : $bg;
+            //$bg_url = is_array($bg) ? $bg['url'] : $bg;
             $p_url  = is_array($printer) ? $printer['url'] : $printer;
             $href   = $link['url'] ?? '#'; $target = $link['target'] ?? '_self';
           ?>
           <article class="cg-banner">
-            <div class="article-inner">
-              <?php if($bg_url): ?>
-                  <img src="<?php echo esc_url($bg_url); ?>" class="img-bg" />
-              <?php endif; ?>            
+            <div class="article-inner">            
               <div class="cg-banner__content">
                   <div class="cg-banner__content_inner">
                     <?php if ($title): ?><h3 class="cg-banner__title"><?php echo esc_html($title); ?></h3><?php endif; ?>

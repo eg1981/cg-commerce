@@ -783,6 +783,9 @@ body {
 
 .cg-banner .article-inner{
     position: relative;
+    height: 318px;
+    background: #FFB941 url(assets/images/yellow-bg.png) 0 0 repeat;
+    background-size: 264% 459px;
 }
 
 .cg-banner a.cg-banner-link{
@@ -2897,4 +2900,119 @@ body table.my_account_orders{
 
 .wc-account-dashboard.orders .wc-section__body table.shop_table_responsive tr.order-details>td{
     padding-right: 0;
+}
+
+.dgwt-wcas-suggestions-wrapp{
+    width: 548px!important;
+}
+
+.wc-account-dashboard .wc-section .wc-section__header.wish svg{
+        width: 16px;
+    position: relative;
+    top: 2px;
+}
+
+.wishlist_item td.product-name{
+    max-width: 267px;
+}
+
+.wishlist_item td.product-name a{
+    font-size: 21px;
+    font-weight: 600;
+    text-decoration: none;
+    line-height: 27px;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.wishlist_item td.product-name .item-sku{
+    font-size: 13px;
+}
+
+.wishlist_item td.product-name .item-desc{
+    font-size: 18px;
+    line-height: 19px;
+    margin-top: 14px;
+}
+
+.tinv-wishlist table td, .tinv-wishlist table th{
+    vertical-align: top;
+}
+
+.tinv-wishlist table td.product-price .amount{
+    font-size: 21px;
+    font-weight: 600;
+}
+
+table:not( .has-background ) tbody td,
+table:not( .has-background ) tbody tr:nth-child(2n) td, fieldset, fieldset legend{
+    background-color: transparent;
+}
+
+.tinv-wishlist table td{
+    border-bottom: 1px solid #F2F5F7
+}
+
+.tinv-wishlist table td.product-price del .amount{
+    opacity: 0.3;
+}
+
+.tinv-wishlist .product-action button.button{
+    text-decoration: none;
+    display: block;
+    width: 116px;
+    height: 35px;
+    line-height: 33px;
+    text-align: center;
+    background: #F1F6FF;
+    border: 1px solid #003399;
+    border-radius: 5px;
+    color: #003399;
+    /*font-size: 18px;*/
+}
+
+.tinv-wishlist .tinvwl-table-manage-list .product-action button[name=tinvwl-remove]{
+    text-decoration: none;
+    display: block;
+    width: 116px;
+    height: 35px;
+    line-height: 33px;
+    text-align: center;
+    background: #FFF4F4;
+    border: 1px solid #EB5757;
+    border-radius: 5px;
+    color: #EB5757;
+    padding: 0;
+    font-weight: normal;
+    margin-top: 14px;   
+}
+
+.tinv-wishlist .tinvwl-table-manage-list .product-action button[name=tinvwl-remove] span{
+    background: url(assets/images/wish-remove.svg) right 2px no-repeat;
+        padding-right: 20px;
+}
+
+.tinv-wishlist .tinvwl-buttons-group button i.ftinvwl-heart-o, .tinv-wishlist .tinvwl-buttons-group button i.ftinvwl-key, .tinv-wishlist .tinvwl-buttons-group button i.ftinvwl-times{
+    display: none;
+}
+
+.tinv-wishlist .tinvwl-buttons-group button.button{
+    border-radius: 5px;
+}
+
+.tinv-wishlist .tinvwl-buttons-group button.button.tinvwl_button_view{
+    width: 100%;
+    background: #FFB941;
+    border-radius: 5px;
+    margin-top: 0;
+    font-size: 18px;
+    padding: 0;
+    height: 40px;
+    line-height: 40px;
+    font-weight: 400;
+    color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
