@@ -800,3 +800,225 @@ function shop_header_img(){
         }
     }
 }
+
+if (!defined('ABSPATH')) exit;
+
+/**
+ * Get pre-VAT total from the live cart.
+ */
+function eg_wc_get_pre_vat_from_cart() {
+	if ( ! function_exists('WC') || ! WC()->cart ) return 0;
+	$t = WC()->cart->get_totals(); // ['total'] and ['total_tax']
+	$pre = (float) ($t['total'] ?? 0) - (float) ($t['total_tax'] ?? 0);
+	return max(0, $pre);
+}
+
+/**
+ * Output a table row in Cart/Checkout totals before the final order total.
+ */
+function eg_wc_output_pre_vat_row() {
+	if ( ! function_exists('WC') || ! WC()->cart ) return;
+	$pre = eg_wc_get_pre_vat_from_cart();
+	echo '<li class="eg-pre-vat">' .
+		 '<label>' . esc_html__('מחיר לפני מע״מ', 'woocommerce') . '</label>' .
+		 '<span data-title="' . esc_attr__('מחיר לפני מע״מ', 'woocommerce') . '">' . wc_price($pre) . '</span>' .
+		 '</li>';
+}
+// Cart page totals table
+add_action('woocommerce_cart_totals_before_order_total', 'eg_wc_output_pre_vat_row', 9);
+// Checkout review-order table
+add_action('woocommerce_review_order_before_order_total', 'eg_wc_output_pre_vat_row', 9);
+
+/**
+ * Inject into order totals array (Thank you page, My Account > Orders, Emails).
+ */
+add_filter('woocommerce_get_order_item_totals', function($totals, $order/*, $tax_display*/) {
+	if ( ! $order instanceof WC_Order ) return $totals;
+	$pre = max(0, (float) $order->get_total() - (float) $order->get_total_tax());
+	$insert = [
+		'eg_pre_vat' => [
+			'label' => 'מחיר לפני מע״מ',
+			'value' => wc_price($pre, ['currency' => $order->get_currency()]),
+		]
+	];
+
+	$new = [];
+	foreach ($totals as $key => $row) {
+		// הוסף את "מחיר לפני מע״מ" לפני ה-order_total
+		if ($key === 'order_total') {
+			$new += $insert;
+		}
+		$new[$key] = $row;
+	}
+	return $new;
+}, 10, 2);
+
+
+//הוספת + - לכמות בסך הקניות
+/** +/- בכמות + עדכון סל אוטומטי + הסתרת כפתור "עדכון סל" (Cart בלבד) **/
+
+// עטיפה וכפתורים סביב שדה הכמות
+add_action('woocommerce_before_quantity_input_field', function () {
+	if (!is_cart()) return;
+	echo '<div class="eg-qty-wrap">';
+	echo '<button type="button" class="eg-qty-btn minus" aria-label="הפחת כמות">−</button>';
+}, 9);
+
+add_action('woocommerce_after_quantity_input_field', function () {
+	if (!is_cart()) return;
+	echo '<button type="button" class="eg-qty-btn plus" aria-label="הוסף כמות">+</button>';
+	echo '</div>';
+}, 9);
+
+// JS: לוגיקת +/− ועדכון סל אוטומטי (debounce)
+add_action('wp_footer', function () {
+	if (!is_cart()) return; ?>
+<script>
+(function($){
+	"use strict";
+
+	function decimals(step){
+		step = String(step || 1);
+		return (step.indexOf('.')>-1) ? (step.length - step.indexOf('.') - 1) : 0;
+	}
+
+	function clamp(val, min, max){
+		if(isNaN(val)) val = 0;
+		if(isFinite(min)) val = Math.max(val, min);
+		if(isFinite(max)) val = Math.min(val, max);
+		return val;
+	}
+
+	function refreshBtnStates($wrap){
+		var $in = $wrap.find('input.qty');
+		var val = parseFloat($in.val());
+		var min = parseFloat($in.attr('min'));
+		var max = parseFloat($in.attr('max'));
+		$wrap.find('.minus').prop('disabled', isFinite(min) && val <= min);
+		$wrap.find('.plus').prop('disabled', isFinite(max) && val >= max);
+	}
+
+	var updateTimer=null;
+	function autoUpdate(){
+		var $btn = $('button[name="update_cart"]');
+		if($btn.length){
+			$btn.prop('disabled', false);
+			$btn.trigger('click');
+		}
+	}
+
+	// לחיצה על +/−
+	$(document).on('click', '.eg-qty-btn', function(){
+		var $wrap = $(this).closest('.eg-qty-wrap');
+		var $in   = $wrap.find('input.qty');
+		var step  = parseFloat($in.attr('step')) || 1;
+		var min   = parseFloat($in.attr('min'));
+		var max   = parseFloat($in.attr('max'));
+		var val   = parseFloat(($in.val()||'').replace(',', '.')) || 0;
+		val += $(this).hasClass('plus') ? step : -step;
+		val = clamp(val, min, max);
+		var dec = decimals(step);
+		$in.val( dec ? val.toFixed(dec) : String(parseInt(val,10)) ).trigger('change');
+		refreshBtnStates($wrap);
+	});
+
+	// שינוי ידני => עדכון סל בהשהיה קצרה
+	$(document).on('change keyup', '.woocommerce-cart-form input.qty', function(){
+		var $wrap = $(this).closest('.eg-qty-wrap');
+		refreshBtnStates($wrap);
+		clearTimeout(updateTimer);
+		updateTimer = setTimeout(autoUpdate, 500);
+	});
+
+	// אתחול מצבי כפתורים בטעינה
+	$(function(){
+		$('.eg-qty-wrap').each(function(){ refreshBtnStates($(this)); });
+	});
+})(jQuery);
+</script>
+<?php });
+
+
+/**
+ * Cart: "שמור לאחר כך" (TI Wishlist) -> ואז הסרה מהסל
+ * דורש תוסף: TI WooCommerce Wishlist (TemplateInvaders)
+ */
+
+if (!defined('ABSPATH')) exit;
+
+/* 1) מוסיף לינק "שמור לאחר כך" ליד קישור ההסרה של כל שורה בסל,
+      ובנוסף מייצר כפתור Wishlist סמוי בעזרת ה־shortcode של TI */
+add_filter('woocommerce_cart_item_remove_link', function ($link_html, $cart_item_key) {
+	if (!is_cart()) return;
+
+	$cart = WC()->cart->get_cart();
+	if (empty($cart[$cart_item_key])) return $link_html;
+
+	$item         = $cart[$cart_item_key];
+	$product_id   = (int) ($item['product_id'] ?? 0);
+	$variation_id = (int) ($item['variation_id'] ?? 0);
+
+	// כפתור TI Wishlist סמוי (מייצר URL+nonce הנכונים של התוסף)
+	$atts = ' product_id="'.$product_id.'"';
+	if ($variation_id) $atts .= ' variation_id="'.$variation_id.'"';
+	$hidden_wl_btn = '<span class="eg-hidden-wl" style="display:none">'
+	               . do_shortcode('[ti_wishlists_addtowishlist'.$atts.' /]')
+	               . '</span>';
+
+	$save_btn = '<a href="#" class="eg-save-for-later" data-cart-key="'.esc_attr($cart_item_key).'" aria-label="שמור לאחר כך">'
+	          . 'שמור לאחר כך</a>';
+
+	return $link_html . $save_btn . $hidden_wl_btn;
+}, 10, 2);
+
+/* 2) סטייל קטן (רשות) */
+add_action('wp_head', function () {
+	if (!is_cart()) return;
+	echo '<style>
+		.woocommerce-cart a.eg-save-for-later { font-size:.9em; text-decoration:underline; }
+		.woocommerce-cart a.eg-save-for-later.disabled { opacity:.5; pointer-events:none; }
+	</style>';
+});
+
+/* 3) JS: לחיצה על "שמור לאחר כך" => טריגר לכפתור TI הסמוי => בהצלחה מסירים מהסל */
+add_action('wp_footer', function () {
+	if (!is_cart()) return; ?>
+<script>
+jQuery(function($){
+	$(document).on('click', '.eg-save-for-later', function(e){
+		e.preventDefault();
+		var $btn = $(this);
+		if ($btn.hasClass('disabled')) return;
+		$btn.addClass('disabled');
+
+		var $row = $btn.closest('tr.cart_item');
+		var $wl  = $row.find('.eg-hidden-wl .tinvwl_add_to_wishlist_button, .eg-hidden-wl a.tinvwl_add_to_wishlist_button, .eg-hidden-wl button.tinvwl_add_to_wishlist_button');
+
+		if (!$wl.length){
+			console.warn('Wishlist button not found in row');
+			$btn.removeClass('disabled');
+			return;
+		}
+
+		// מפעיל את כפתור ה-Wishlist של התוסף (AJAX שלהם)
+		$wl.trigger('click');
+
+		// מחכים לסיום – בודקים שהכפתור קיבל מצב "נוסף"
+		var tries = 0, tick = setInterval(function(){
+			tries++;
+			if ($wl.hasClass('tinvwl-product-in-list') || $wl.hasClass('tinvwl-added') || tries > 40) {
+				clearInterval(tick);
+				if (tries <= 40) {
+					// מסיר מהסל את אותה שורה (כמו לחיצה על ה-X)
+					var $remove = $row.find('.product-remove a.remove');
+					if ($remove.length) { $remove.trigger('click'); }
+				} else {
+					// ככל הנראה נדרש התחברות/הרשאות – משחרר את הכפתור
+					$btn.removeClass('disabled');
+				}
+			}
+		}, 150);
+	});
+});
+</script>
+<?php });

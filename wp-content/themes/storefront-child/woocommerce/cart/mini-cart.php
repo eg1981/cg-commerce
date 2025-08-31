@@ -22,6 +22,10 @@ defined( 'ABSPATH' ) || exit;
 do_action( 'woocommerce_before_mini_cart' ); ?>
 
 <?php if ( WC()->cart && ! WC()->cart->is_empty() ) : ?>
+    <?php
+        $t   = WC()->cart->get_totals();
+        $pre = max(0, (float) ($t['total'] ?? 0) - (float) ($t['total_tax'] ?? 0));
+    ?>
     <div class="cart-title">עגלת קניות</div>
     <div class="table-wrap">
     <div class="table-wrap-inner">
@@ -144,6 +148,10 @@ do_action( 'woocommerce_before_mini_cart' ); ?>
                             <?php echo wc_price( WC()->cart->get_shipping_total() ); ?>
                         </li>
                     <?php endif; ?>
+
+                    <li class="eg-pre-vat"><strong><?php esc_html_e('מחיר לפני מע״מ','woocommerce'); ?>:</strong>
+                       <?php echo wc_price($pre); ?>
+                    </li>
 
                     <li class="total-a"><strong><?php esc_html_e( 'Total:', 'woocommerce' ); ?></strong>
                         <?php wc_cart_totals_order_total_html(); ?>
