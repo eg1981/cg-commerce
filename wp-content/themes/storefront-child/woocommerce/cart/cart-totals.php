@@ -19,7 +19,10 @@ defined( 'ABSPATH' ) || exit;
 
 ?>
 <div class="cart_totals <?php echo ( WC()->customer->has_calculated_shipping() ) ? 'calculated_shipping' : ''; ?>">
-
+	<?php
+        $t   = WC()->cart->get_totals();
+        $pre = max(0, (float) ($t['total'] ?? 0) - (float) ($t['total_tax'] ?? 0));
+    ?>
     <div class="cart_totals_inner">
 
 	<?php do_action( 'woocommerce_before_cart_totals' ); ?>
@@ -99,6 +102,10 @@ defined( 'ABSPATH' ) || exit;
 		?>
 
 		<?php do_action( 'woocommerce_cart_totals_before_order_total' ); ?>
+
+		<li class="eg-pre-vat"><strong><?php esc_html_e('מחיר לפני מע״מ','woocommerce'); ?>:</strong>
+			<?php echo wc_price($pre); ?>
+		</li>		
 
 		<li class="order-total">
 			<label><?php esc_html_e( 'Total', 'woocommerce' ); ?></label>

@@ -1383,18 +1383,21 @@ body ul.products li.product .price{
     text-align: right;
     margin-top: 10px;
     padding: 0 10px;
+    display: flex;
+    flex-direction: column;
 }
 
 body ul.products li.product .price ins{
     color: #FF4141;
     font-size: 18px;
-    font-weight: 600;
+font-weight: 500;
+    float: left;
 }
 
 body .price del{
     opacity: 1;
-    font-weight: 400;
-    color: #000;
+    font-weight: 500;
+    color: #003399;
 }
 
 ul.products li.product{
@@ -1617,7 +1620,9 @@ section.cg-double-banners{
 body.woocommerce-account .storefront-breadcrumb,
 body.woocommerce-account .entry-header,
 body.page-id-302 .storefront-breadcrumb,
-body.page-id-302 .entry-header{
+body.page-id-302 .entry-header,
+body.page-id-357 .storefront-breadcrumb,
+body.page-id-357 .entry-header{
     display:none;
 }
 
@@ -1989,8 +1994,11 @@ body.single-product div.product p.price {
     font-size: 41px;
     margin: 0;
     color: #003399;
-    font-weight: 600;
+    font-weight: 500;
     text-align: left;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
 }
 
 .woocommerce-product-details__short-description{
@@ -2919,7 +2927,7 @@ body table.my_account_orders{
 
 .wishlist_item td.product-name a{
     font-size: 21px;
-    font-weight: 600;
+    font-weight: 500;
     text-decoration: none;
     line-height: 27px;
     margin-bottom: 15px;
@@ -2942,7 +2950,7 @@ body table.my_account_orders{
 
 .tinv-wishlist table td.product-price .amount{
     font-size: 21px;
-    font-weight: 600;
+    font-weight: 500;
 }
 
 table:not( .has-background ) tbody td,
@@ -3284,4 +3292,327 @@ table.cart {
 
 body table.shop_table_responsive tr:last-child td{
     border-bottom: none!important;
+}
+
+.form-column .wpcf7-form{
+    background: #003399;
+    border-radius: 10px;
+    padding: 50px;
+        position: relative;
+}
+
+.form-column .wpcf7-form label{
+    font-size: 18px;
+    color: #fff;
+}
+
+.form-column .wpcf7-form .items{
+    display: flex;
+    align-items: center;
+}
+
+.form-column .wpcf7-form .items .item{
+    width: 50%;
+    padding: 0 10px;
+}
+
+.form-column .wpcf7-form .items .item input{
+    max-width: 100%;
+    padding: 0 10px;
+}
+
+body.page-id-357 .entry-content{
+    margin-top: 90px;
+}
+
+.form-column .wpcf7-form .text-area{
+    padding: 0 10px;
+}
+
+.form-column .wpcf7-form .text-area textarea{
+    height: 155px;
+}
+
+.contact-form h2{
+    font-size: 41px;
+    color: #fff;
+}
+
+red{
+    color:red
+}
+
+.contact-form .req{
+    color: #fff;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    padding: 0 10px;
+}
+
+.contact-form .req p{
+    margin: 0;
+    font-size: 18px;
+}
+
+.contact-form .cg-newsletter-consent{
+    direction: ltr;
+    text-align: right;
+    float: none;
+}
+
+.contact-form .cg-newsletter-consent span.wpcf7-list-item-label{
+    direction: rtl;
+    display: block;    
+}
+
+.contact-form .cg-newsletter-consent p{
+    margin: 0;
+}
+
+.contact-form input.wpcf7-submit{
+    display: inline-block;
+    background: #FFB941;
+    border-radius: 5px;
+    font-size: 24px;
+    padding: 0;
+    height: 60px;
+    line-height: 60px;
+    font-weight: 400;
+    color: #003399;
+    width: 248px;
+    margin-top: 40px;
+}
+
+.contact-form .submit{
+    text-align: left;
+    position: relative;
+    padding: 0 10px;
+}
+
+.contact-form .submit .wpcf7-spinner{
+    position: absolute;
+    margin: 0;
+    bottom: 18px;
+    left: 24px;
+}
+
+.contact-form .submit p{
+     margin: 0;
+}
+
+.form-column .wpcf7 form .wpcf7-response-output{
+    color: #fff;
+    position: absolute;
+    bottom: 50px;
+}
+
+.form-column .wpcf7-not-valid-tip{
+    position: absolute;
+}
+
+.contact-details{
+    background: #F2F5F7;
+    border: 1px solid #BDBDBD;
+    border-radius: 10px;
+    padding: 28px 46px 20px;
+}
+
+.contact-details .wp-block-media-text{
+    direction: rtl;
+    display: flex;
+    margin-block-start: 0;
+    margin-block-end: 32px;
+}
+
+.contact-details .wp-block-media-text .wp-block-media-text__media{
+    width: 35px;
+}
+
+.wp-block-column.form-column{
+    margin-left: 24px!important;
+}
+
+.contact-details .wp-block-media-text p{
+    margin: 0;
+    color: #424B5A;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.contact-left{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.eg-usd-price {
+    font-size: 14px;
+    color: #92A9B5;
+    margin-inline-start: 0;
+    white-space: nowrap;
+}
+
+body ul.products li.product.sale .price{
+    display: block;
+}
+
+body ul.products li.product.sale span.price span.price{
+    padding:0;
+}
+
+body ul.products li.product.sale .eg-usd-price{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+body ul.products li.product.sale .eg-usd-price .eg-usd-regular{
+    text-decoration: line-through;
+}
+
+body.single-product div.product p.price .eg-usd-price{
+    font-size: 30px;
+    margin-top: -10px;
+}
+
+body.single-product div.product p.price .eg-usd-price .eg-usd-regular{
+    display:none;
+}
+
+body.single-product div.product p.price .eg-usd-price::before{
+    content:"(";
+    display: inline-block;
+}
+
+body.single-product div.product p.price .eg-usd-price::after{
+    content:")";
+    display: inline-block;
+}
+
+body.single-product div.product.sale p.price del{
+    order: 2;
+    margin-top: -15px;
+    font-size: 32px;
+}
+
+body.single-product div.product.sale p.price ins{
+    order: 1;
+    color: #EB5757;
+    font-weight: 500;
+    font-size: 41px;
+}
+
+body.single-product div.product.sale p.price .eg-usd-price{
+    order: 3;
+}
+
+body.single-product div.product.sale.product-type-variable p.price span.price{
+    display: flex;
+    flex-direction: column;
+    font-size: 18px;
+}
+
+body.single-product div.product.sale.product-type-variable p.price span.price .eg-usd-price{
+    display:none;
+}
+
+.wishlist_item .eg-usd-price,
+.br_compare_popup_block .eg-usd-price{
+    display:none;
+}
+
+body div.br_new_compare div.br_right_table,body div.br_top_table div.br_main_top,body div.br_top_table div.br_opacity_top {
+    margin-left: 0 !important;
+    margin-right: 200px !important;
+}
+
+.br_new_compare .br_left_table{
+    border-right: 0 !important;
+    left: auto !important;
+    right: 1px;
+}
+
+.br_new_compare_block a.add_to_cart_button {
+    width: 85%;
+    background: #FFB941;
+    border-radius: 5px;
+    font-size: 18px;
+    padding: 0;
+    height: 40px;
+    line-height: 40px;
+    font-weight: 400;
+    color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin: 20px auto;
+}
+
+div.br_top_table div.br_main_top h3 a{
+    font-size: 21px;
+    font-weight: 500;
+    text-decoration: none;
+    line-height: 27px;
+    margin-bottom: 15px;
+    display: block;
+    padding: 0 15px;
+    position: relative;
+    top: 10px;
+}
+
+body .price.br_compare_price{
+    font-size: 21px;
+    font-weight: 500;
+    color: #000;
+}
+
+body .price.br_compare_price del{
+    color:#000;
+    font-weight: 400;
+    opacity: 0.3;
+}
+
+.price.br_compare_price ins {
+    font-weight: 500;
+}
+
+body div.br_new_compare .br_right_table tr td,body div.br_new_compare .br_right_table tr th,body div.br_new_compare .br_left_table, div.br_new_compare_block .br_top_table table th,body div.br_new_compare_block .br_top_table table td,
+body .br_new_compare .br_right_table th,body .br_new_compare .br_right_table td,body .br_new_compare .br_left_table th,body .br_new_compare .br_left_table td,body .br_top_table th,body .br_top_table td{
+    vertical-align: middle;
+}
+
+body .br_new_compare .br_right_table p{
+    /*line-height: 35px !important;*/
+    height: 100%;
+    /*display: inline-block;*/
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+body .br_new_compare .br_left_table tr th,body .br_new_compare .br_left_table tr td,body .br_new_compare .br_right_table p{
+    vertical-align: middle;
+}
+
+body .br_new_compare .br_right_table thead tr th a{
+    display: flex !important;
+}
+
+body .br_new_compare .br_right_table thead tr th a img{
+    display: flex;
+    max-width: 150px !important;
+}
+
+.form-row-wide#billing_country_field{
+    display:none;
+}
+
+small.includes_tax{
+    display:none;
+}
+
+.woocommerce-form-coupon-toggle{
+     display:none;
 }

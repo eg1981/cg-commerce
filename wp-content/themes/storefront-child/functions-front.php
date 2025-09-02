@@ -825,9 +825,9 @@ function eg_wc_output_pre_vat_row() {
 		 '</li>';
 }
 // Cart page totals table
-add_action('woocommerce_cart_totals_before_order_total', 'eg_wc_output_pre_vat_row', 9);
+//add_action('woocommerce_cart_totals_before_order_total', 'eg_wc_output_pre_vat_row', 9);
 // Checkout review-order table
-add_action('woocommerce_review_order_before_order_total', 'eg_wc_output_pre_vat_row', 9);
+//add_action('woocommerce_review_order_before_order_total', 'eg_wc_output_pre_vat_row', 9);
 
 /**
  * Inject into order totals array (Thank you page, My Account > Orders, Emails).
@@ -1022,3 +1022,67 @@ jQuery(function($){
 });
 </script>
 <?php });
+
+/* ===== USD helper ===== */
+function eg_get_usd_rate() {
+	// ערך משדה ACF גלובלי (Options). שנה לפי המקום שהגדרת.
+	$rate = (float) get_field('rate_ex', 'option');
+	if (!$rate) { $rate = 3.35; } // fallback
+	return $rate;
+}
+function eg_usd_amount($amount) {
+	$rate = eg_get_usd_rate();
+	if (!$rate || $amount <= 0) return '';
+	$usd = $amount / $rate;
+	return '$' . number_format($usd, 2);
+}
+function eg_usd_suffix_pair($regular_display, $sale_display = null) {
+	// אם יש מחיר מבצע קטן מהרגיל – מציגים "לפני → אחרי", אחרת רק רגיל
+	if ($sale_display && $sale_display > 0 && $sale_display < $regular_display) {
+		return ' <span class="eg-usd-price"><span class="eg-usd-regular">'.eg_usd_amount($regular_display).'</span> <span class="eg-usd-sale">'.eg_usd_amount($sale_display).'</span></span>';
+	}
+	return ' <span class="eg-usd-price">'.eg_usd_amount($regular_display).'</span>';
+}
+
+/* ===== קטגוריות + עמוד מוצר (מחיר בסיסי) ===== */
+add_filter('woocommerce_get_price_html', function($html, $product){
+	if (!$product instanceof WC_Product) return $html;
+
+	// מוצרים משתנים (טווחים)
+	if ( $product->is_type('variable') ) {
+		$display_incl = ('incl' === get_option('woocommerce_tax_display_shop')); // true => מחיר לתצוגה כולל מע"מ לפי ההגדרות
+		$reg_min  = (float) $product->get_variation_regular_price('min', $display_incl);
+		$reg_max  = (float) $product->get_variation_regular_price('max', $display_incl);
+		$sale_min = (float) $product->get_variation_sale_price('min',  $display_incl);
+		$sale_max = (float) $product->get_variation_sale_price('max',  $display_incl);
+
+		//$range_reg  = ($reg_min === $reg_max) ? eg_usd_amount($reg_min) : eg_usd_amount($reg_min) . '–' . eg_usd_amount($reg_max);
+        $range_reg  = ($reg_min === $reg_max) ? eg_usd_amount($reg_min) : eg_usd_amount($reg_min);
+
+		if ( $product->is_on_sale() && $sale_min > 0 ) {
+			//$range_sale = ($sale_min === $sale_max) ? eg_usd_amount($sale_min) : eg_usd_amount($sale_min) . '–' . eg_usd_amount($sale_max);
+            $range_sale = ($sale_min === $sale_max) ? eg_usd_amount($sale_min) : eg_usd_amount($sale_min);
+			$html .= ' <span class="eg-usd-price"><span class="eg-usd-regular">'.$range_reg.'</span><span class="eg-usd-sale">'.$range_sale.'</span></span>';
+		} else {
+			$html .= ' <span class="eg-usd-price">'.$range_reg.'</span>';
+		}
+		return $html;
+	}
+
+	// מוצרים פשוטים/חיצוניים/מקובצים – לפי מחיר לתצוגה (מכבד כולל/לא כולל מע"מ)
+	$reg  = wc_get_price_to_display($product, ['price' => (float) $product->get_regular_price()]);
+	$sale = $product->get_sale_price() ? wc_get_price_to_display($product, ['price' => (float) $product->get_sale_price()]) : 0;
+
+	return $html . eg_usd_suffix_pair($reg, $sale ?: null);
+}, 30, 2);
+
+/* ===== וריאציות: מחיר משתנה בדינמיקה ===== */
+add_filter('woocommerce_available_variation', function($data, $product, $variation){
+	if (!$variation instanceof WC_Product_Variation) return $data;
+
+	$reg  = wc_get_price_to_display($variation, ['price' => (float) $variation->get_regular_price()]);
+	$sale = $variation->get_sale_price() ? wc_get_price_to_display($variation, ['price' => (float) $variation->get_sale_price()]) : 0;
+
+	$data['price_html'] .= eg_usd_suffix_pair($reg, $sale ?: null);
+	return $data;
+}, 30, 3);

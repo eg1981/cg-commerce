@@ -16,6 +16,9 @@
  */
 
 defined( 'ABSPATH' ) || exit;
+
+$t   = WC()->cart->get_totals();
+$pre = max(0, (float) ($t['total'] ?? 0) - (float) ($t['total_tax'] ?? 0));
 ?>
 <table class="shop_table woocommerce-checkout-review-order-table">
 	<thead>
@@ -98,6 +101,11 @@ defined( 'ABSPATH' ) || exit;
 		<?php endif; ?>
 
 		<?php do_action( 'woocommerce_review_order_before_order_total' ); ?>
+
+		<tr class="eg-pre-vat">
+			<th><?php esc_html_e('מחיר לפני מע״מ','woocommerce'); ?>:</th>
+			<td><?php echo wc_price($pre); ?></td>
+		</tr>			
 
 		<tr class="order-total">
 			<th><?php esc_html_e( 'Total', 'woocommerce' ); ?></th>
