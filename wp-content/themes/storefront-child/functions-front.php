@@ -1086,3 +1086,150 @@ add_filter('woocommerce_available_variation', function($data, $product, $variati
 	$data['price_html'] .= eg_usd_suffix_pair($reg, $sale ?: null);
 	return $data;
 }, 30, 3);
+
+// functions.php (בתבנית-בת או בתוסף ייעודי)
+add_action( 'wp', function () {
+
+    // 1) מסיר את בלוק התשלום המלא (שכולל גם כפתור) מהמיקום הדיפולטי
+    remove_action( 'woocommerce_checkout_order_review', 'woocommerce_checkout_payment', 20 );
+
+    // 2) מציג רק את שיטות התשלום מיד אחרי פרטי הלקוח
+    add_action( 'woocommerce_checkout_after_customer_details', function () {
+
+        if ( ! is_checkout() ) return;
+
+        $gateways = WC()->payment_gateways()->get_available_payment_gateways();
+
+        // מגדיר gateway נבחר לפי סשן/דיפולט
+        WC()->payment_gateways()->set_current_gateway( $gateways );
+
+        echo '<div class="wc-payment-methods-only">';
+        echo '<h3>' . esc_html__( 'שיטת תשלום', 'woocommerce' ) . '</h3>';
+
+        if ( ! empty( $gateways ) ) {
+            echo '<ul class="wc_payment_methods payment_methods methods">';
+            foreach ( $gateways as $gateway ) {
+                // תבנית הלייסט-אייטם של כל Gateway (כולל הרדיו והשדות)
+                wc_get_template( 'checkout/payment-method.php', array( 'gateway' => $gateway ) );
+            }
+            echo '</ul>';
+        } else {
+            // הודעה כשאין שערים זמינים
+            echo '<div class="woocommerce-info">' .
+                 wp_kses_post( apply_filters(
+                     'woocommerce_no_available_payment_methods_message',
+                     __( 'אין אמצעי תשלום זמינים עבור הכתובת/מטבע הנוכחיים.', 'woocommerce' )
+                 ) ) .
+                 '</div>';
+        }
+
+        echo '</div>';
+    }, 20 );
+
+    // 3) מחזיר באזור הסיכום רק את כפתור ההזמנה (פלוס תנאים ו־nonce)
+    add_action( 'woocommerce_checkout_order_review', function () {
+
+        if ( ! is_checkout() ) return;
+
+        echo '<div class="wc-place-order-only">';
+
+        // תנאי שימוש/פרטיות (אם מופעל בהגדרות)
+        wc_get_template( 'checkout/terms.php' );
+
+        do_action( 'woocommerce_review_order_before_submit' );
+
+        $order_button_text = apply_filters( 'woocommerce_order_button_text', __( 'Place order', 'woocommerce' ) );
+
+        echo apply_filters(
+            'woocommerce_order_button_html',
+            '<button type="submit" class="button alt" name="woocommerce_checkout_place_order" id="place_order"
+                value="' . esc_attr( $order_button_text ) . '" data-value="' . esc_attr( $order_button_text ) . '">'
+                . esc_html( $order_button_text ) .
+            '</button>'
+        );
+
+        do_action( 'woocommerce_review_order_after_submit' );
+
+        // nonce של תהליך הצ'קאאוט
+        wp_nonce_field( 'woocommerce-process_checkout', 'woocommerce-process-checkout-nonce' );
+
+        echo '</div>';
+
+    }, 20 );
+}, 99 );
+
+//הזזת שיטות משלוח בקופה
+function eran_checkout_shipping_methods_html() {
+    if ( ! function_exists('WC') || ! is_checkout() ) return '';
+    if ( ! WC()->cart || ! WC()->cart->needs_shipping() || ! WC()->cart->show_shipping() ) return '';
+
+    // תאימות: קבלת החבילות
+    $packages = method_exists( WC()->shipping, 'get_packages' )
+        ? WC()->shipping->get_packages()
+        : WC()->shipping()->get_packages();
+
+    $chosen_methods        = WC()->session->get( 'chosen_shipping_methods', array() );
+    $has_calculated        = WC()->customer ? WC()->customer->has_calculated_shipping() : false;
+
+    ob_start();
+    echo '<section id="eg-shipping-methods" class="checkout-shipping-methods">';
+    echo '<h3>' . esc_html__( 'שיטת משלוח', 'woocommerce' ) . '</h3>';
+
+    foreach ( $packages as $i => $package ) {
+        $available_methods    = isset( $package['rates'] ) ? $package['rates'] : array();
+        $chosen_method        = isset( $chosen_methods[ $i ] ) ? $chosen_methods[ $i ] : '';
+        $formatted_destination = WC()->countries->get_formatted_address( $package['destination'], ', ' );
+
+        // *** חשוב: מעבירים גם package_name, index ו־has_calculated_shipping ***
+        $package_name = apply_filters(
+            'woocommerce_shipping_package_name',
+            sprintf( _x( 'Shipping %d', 'shipping packages', 'woocommerce' ), $i + 1 ),
+            $i,
+            $package
+        );
+
+        wc_get_template( 'cart/cart-shipping.php', array(
+            'package'                   => $package,
+            'available_methods'         => $available_methods,
+            'show_package_details'      => count( $packages ) > 1,
+            'show_shipping_calculator'  => false,
+            'package_index'             => $i,     // חלק מהגרסאות
+            'index'                     => $i,     // חלק אחר
+            'chosen_method'             => $chosen_method,
+            'formatted_destination'     => $formatted_destination,
+            'has_calculated_shipping'   => $has_calculated,
+            'package_name'              => $package_name, // מונע ה־Notice
+        ) );
+    }
+
+    echo '</section>';
+    return ob_get_clean();
+}
+
+// מדפיס לפני כותרת הסיכום
+add_action( 'woocommerce_checkout_before_order_review_heading', function () {
+    echo eran_checkout_shipping_methods_html();
+}, 12 );
+
+// מסתיר כפילות של שורות משלוח בסיכום
+add_filter( 'woocommerce_cart_totals_shipping_html', function ( $html ) {
+    return is_checkout() ? '' : $html;
+}, 10 );
+
+// רענון AJAX לפרגמנט
+add_filter( 'woocommerce_update_order_review_fragments', function ( $fragments ) {
+    $fragments['#eg-shipping-methods'] = eran_checkout_shipping_methods_html();
+    return $fragments;
+});
+
+add_filter('woocommerce_shipping_package_name', function($name){
+    return '<span class="screen-reader-text">'.esc_html($name).'</span>';
+}, 10);
+
+// קובע 5 תוצאות ו־5 עמודות ל־Related Products
+add_filter('woocommerce_output_related_products_args', function($args){
+    $args['posts_per_page'] = 5; // כמה מוצרים להציג
+    $args['columns']        = 1; // כמה עמודות ברשת
+    // אופציונלי: $args['orderby'] = 'rand'; // סדר אקראי
+    return $args;
+}, 20);

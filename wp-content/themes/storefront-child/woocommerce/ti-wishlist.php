@@ -158,7 +158,7 @@ wp_enqueue_script( 'tinvwl' );
                                                 ?>
                                                 <button class="button alt" name="tinvwl-add-to-cart"
                                                         value="<?php echo esc_attr( $wl_product['ID'] ); ?>"
-                                                        title="<?php echo esc_html( apply_filters( 'tinvwl_wishlist_item_add_to_cart', $wishlist_table_row['text_add_to_cart'], $wl_product, $product ) ); ?>">
+                                                        title="העבר לסל">
                                                     <i
                                                         class="ftinvwl ftinvwl-shopping-cart"></i><span
                                                         class="tinvwl-txt">העבר לסל</span>
