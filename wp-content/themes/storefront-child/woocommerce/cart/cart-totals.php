@@ -39,7 +39,7 @@ defined( 'ABSPATH' ) || exit;
                     <div class="eg-coupon-row">
                         <input type="text" name="coupon_code" class="input-text" id="eg_coupon_code"
                             placeholder="<?php esc_attr_e('הזן קופון','woocommerce'); ?>" />
-                        <button type="submit" class="button" name="apply_coupon" value="<?php esc_attr_e('Apply coupon','woocommerce'); ?>">
+                        <button type="submit" class="button apply_coupon" name="apply_coupon" value="<?php esc_attr_e('Apply coupon','woocommerce'); ?>">
                             <?php esc_html_e('הפעל','woocommerce'); ?>
                         </button>
                     </div>
