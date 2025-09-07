@@ -34,7 +34,7 @@ do_action( 'woocommerce_before_mini_cart' ); ?>
             <th>מוצר</th>
             <th>מחיר</th>
             <th>כמות</th>
-            <th>סה"כ</th>
+            <th class="total-s">סה"כ</th>
             <th></th>
         </thead>
         <tbody>

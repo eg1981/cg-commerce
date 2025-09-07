@@ -1233,3 +1233,36 @@ add_filter('woocommerce_output_related_products_args', function($args){
     // אופציונלי: $args['orderby'] = 'rand'; // סדר אקראי
     return $args;
 }, 20);
+
+// כפתור צף: חזרה לראש העמוד (RTL friendly)
+add_action('wp_footer', function () {
+    ?>
+    <button type="button" id="backToTop" class="back-to-top" aria-label="<?php esc_attr_e('חזרה לראש העמוד', 'td'); ?>"></button>
+    <?php
+});
+
+add_action( 'init', function () {
+	remove_action( 'storefront_footer', 'storefront_handheld_footer_bar', 999 );
+});
+
+// משנה את ה־href של המיני־קארט בהאדר (Storefront)
+if ( ! function_exists( 'storefront_cart_link' ) ) :
+function storefront_cart_link() {
+    if ( ! function_exists( 'WC' ) || ! WC()->cart ) {
+        return;
+    }
+    $count = WC()->cart->get_cart_contents_count();
+    $total = WC()->cart->get_cart_total(); // כולל סימון מטבע/HTML
+
+    ?>
+    <a class="cart-contents" href="javascript:void(0);"
+       title="<?php esc_attr_e( 'לסל הקניות', 'storefront' ); ?>">
+        <?php echo wp_kses_post( $total ); ?>
+        <span class="count" data-count="<?php echo esc_attr( $count ); ?>">
+            <?php echo esc_html( $count ); ?> <?php esc_html_e( 'items', 'storefront' ); ?>
+        </span>
+    </a>
+    <?php
+}
+endif;
+
