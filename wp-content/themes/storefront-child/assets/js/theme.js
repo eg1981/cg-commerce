@@ -152,6 +152,31 @@ jQuery(function($){
 
 //mobile header
 (function ($) {
+
+  //adding close icon to menu
+  $('<div/>', { class: 'menu-close', text: '' }).appendTo('.handheld-navigation');
+
+  $('body').on('click', '.menu-close', function(e){
+      $('.main-navigation').removeClass('toggled');
+  });
+
+  //filter on catalog
+  if ($(window).width() < 991){
+    if ($('.loop_wrap_start').length){
+        $('<div/>', { class: 'filter-icon', text: 'סינון לפי' }).appendTo('.loop_wrap_start');
+        $('<div/>', { class: 'filter-close', text: '' }).appendTo('.shop_loop_side_wrap');
+    }
+
+    $('body').on('click', '.filter-close', function(e){
+        $('body').removeClass('filter-show');
+    });    
+
+    $('body').on('click', '.filter-icon', function(e){
+        $('body').addClass('filter-show');
+    });
+
+  }
+
   if ($(window).width() < 767){
 
     jQuery(function($){
@@ -173,5 +198,6 @@ jQuery(function($){
     $('body').on('click', '.site-header-cart a.cart-contents', function(e){
         $(this).parent().parent().find('.widget_shopping_cart').toggleClass('active');
     });
+    
   }
 })(jQuery);
