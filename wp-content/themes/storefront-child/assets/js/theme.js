@@ -168,6 +168,8 @@ jQuery(function($){
 
     $('body .dgwt-wcas-search-wrapp').appendTo('.site-header');
 
+    $('.site-header').addClass('active');
+
     $('body').on('click', '.site-header-cart a.cart-contents', function(e){
         $(this).parent().parent().find('.widget_shopping_cart').toggleClass('active');
     });
